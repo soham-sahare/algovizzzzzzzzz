@@ -13,9 +13,12 @@ import {
     generateDoublyDeleteAtPositionSteps,
     generateDoublyDeleteValueSteps,
     generateDoublySearchSteps,
-    generateDoublyReverseSteps
+    generateDoublyReverseSteps,
+    generateDoublyTraverseForwardSteps,
+    generateDoublyTraverseBackwardSteps,
+    generateDoublyInsertBeforeNodeSteps
 } from "@/lib/algorithms/linkedList/doubly";
-import { Plus, Trash2, RotateCcw, Play, Pause, Search, Settings, ArrowRightLeft } from "lucide-react";
+import { Plus, Trash2, Play, Pause, Search, Settings, ArrowRightLeft, ArrowRight, ArrowLeft } from "lucide-react";
 import CodeHighlight from "@/components/visualizations/CodeHighlight";
 
 const INSERT_HEAD_CODE = `function insertHead(val):
@@ -85,8 +88,32 @@ const REVERSE_CODE = `function reverse():
   while curr:
     swap(curr.prev, curr.next)
     head = curr 
-    curr = curr.prev // move to next (which was prev)
+    curr = curr.prev
   return head`;
+
+const TRAVERSE_FWD_CODE = `function traverseForward():
+  curr = head
+  while curr:
+    print(curr.val)
+    curr = curr.next`;
+
+const TRAVERSE_BWD_CODE = `function traverseBackward():
+  curr = tail
+  while curr:
+    print(curr.val)
+    curr = curr.prev`;
+
+const INSERT_BEFORE_CODE = `function insertBefore(target, val):
+  if head.val == target: insertHead(val)
+  curr = head
+  while curr and curr.val != target:
+    curr = curr.next
+  if curr:
+    newNode = new Node(val)
+    newNode.prev = curr.prev
+    newNode.next = curr
+    curr.prev.next = newNode
+    curr.prev = newNode`;
 
 export default function DoublyLinkedListPage() {
   const [nodes, setNodes] = useState<LinkedListNode[]>([
@@ -109,6 +136,8 @@ export default function DoublyLinkedListPage() {
   const [deleteValue, setDeleteValue] = useState("20");
   const [deleteIndex, setDeleteIndex] = useState("0");
   const [searchValue, setSearchValue] = useState("20");
+  const [insertBeforeTarget, setInsertBeforeTarget] = useState("20");
+  const [createArrayInput, setCreateArrayInput] = useState("10, 20, 30, 40");
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -190,9 +219,39 @@ export default function DoublyLinkedListPage() {
       setActiveCode(SEARCH_CODE);
       executeOperation(generateDoublySearchSteps(nodes, val));
   };
-   const handleReverse = () => {
+  const handleReverse = () => {
       setActiveCode(REVERSE_CODE);
       executeOperation(generateDoublyReverseSteps(nodes));
+  };
+  
+  const handleTraverseForward = () => {
+      setActiveCode(TRAVERSE_FWD_CODE);
+      executeOperation(generateDoublyTraverseForwardSteps(nodes));
+  };
+
+  const handleTraverseBackward = () => {
+      setActiveCode(TRAVERSE_BWD_CODE);
+      executeOperation(generateDoublyTraverseBackwardSteps(nodes));
+  };
+
+  const handleInsertBefore = () => {
+      const val = parseInt(inputValue);
+      const target = parseInt(insertBeforeTarget);
+      if(isNaN(val) || isNaN(target)) return;
+      setActiveCode(INSERT_BEFORE_CODE);
+      executeOperation(generateDoublyInsertBeforeNodeSteps(nodes, target, val));
+  };
+  
+  const handleCreateFromArray = () => {
+      const arr = createArrayInput.split(",").map(s => parseInt(s.trim())).filter(n => !isNaN(n));
+      if(arr.length === 0) return;
+      // Re-create nodes
+      const newNodes = arr.map((val, i) => ({ id: `new${i}`, value: val }));
+      setNodes(newNodes);
+      setSteps([]);
+      setCurrentStep(0);
+      setIsPlaying(false);
+      setMessage("List created from array.");
   };
 
 
@@ -290,6 +349,16 @@ export default function DoublyLinkedListPage() {
                     <button onClick={handleInsertTail} disabled={isProcessing} className="bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white py-2 rounded text-sm font-medium transition disabled:opacity-50">Tail</button>
                     <button onClick={handleInsertAtPosition} disabled={isProcessing} className="bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white py-2 rounded text-sm font-medium transition disabled:opacity-50">Pos</button>
                 </div>
+                <div className="flex gap-2 border-t border-zinc-200 dark:border-zinc-700 pt-3 mt-1">
+                    <input 
+                        type="number" 
+                        value={insertBeforeTarget} 
+                        onChange={(e) => setInsertBeforeTarget(e.target.value)} 
+                        className="w-16 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm"
+                        placeholder="Tgt"
+                    />
+                    <button onClick={handleInsertBefore} disabled={isProcessing} className="flex-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-white py-2 rounded text-sm font-medium transition disabled:opacity-50">Insert Before</button>
+                </div>
             </div>
 
              {/* Delete Controls */}
@@ -320,10 +389,23 @@ export default function DoublyLinkedListPage() {
             </div>
 
             {/* Operations Controls */}
-             <div className="bg-zinc-50 dark:bg-zinc-900/30 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3">
-                <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-2">
-                    <Settings className="w-4 h-4" /> Operations
-                </h3>
+             <div className="bg-zinc-50 dark:bg-zinc-900/30 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-4">
+                <div className="space-y-3">
+                    <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-2">
+                        <Settings className="w-4 h-4" /> Create & Ops
+                    </h3>
+                    <div className="flex gap-2">
+                         <input 
+                            type="text" 
+                            value={createArrayInput} 
+                            onChange={(e) => setCreateArrayInput(e.target.value)} 
+                            className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm"
+                            placeholder="10, 20..."
+                        />
+                        <button onClick={handleCreateFromArray} className="whitespace-nowrap px-3 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white py-2 rounded text-sm font-medium transition">Set</button>
+                    </div>
+                </div>
+
                 <div className="flex gap-2">
                   <input 
                     type="number" 
@@ -334,7 +416,17 @@ export default function DoublyLinkedListPage() {
                    />
                    <button onClick={handleSearch} disabled={isProcessing} className="whitespace-nowrap px-3 bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/30 dark:text-blue-200 py-2 rounded text-sm font-medium transition disabled:opacity-50">Search</button>
                 </div>
-                 <button onClick={handleReverse} disabled={isProcessing} className="w-full bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white py-2 rounded text-sm font-medium transition flex items-center justify-center gap-2 disabled:opacity-50">
+
+                 <div className="grid grid-cols-2 gap-2">
+                     <button onClick={handleTraverseForward} disabled={isProcessing} className="flex items-center justify-center gap-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 py-2 rounded text-sm font-medium transition disabled:opacity-50">
+                        <ArrowRight className="w-4 h-4" /> Fwd
+                     </button>
+                     <button onClick={handleTraverseBackward} disabled={isProcessing} className="flex items-center justify-center gap-2 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 py-2 rounded text-sm font-medium transition disabled:opacity-50">
+                        <ArrowLeft className="w-4 h-4" /> Bwd
+                     </button>
+                 </div>
+
+                 <button onClick={handleReverse} disabled={isProcessing} className="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-200 py-2 rounded text-sm font-medium transition flex items-center justify-center gap-2 disabled:opacity-50">
                     <ArrowRightLeft className="w-4 h-4" /> Reverse List
                  </button>
             </div>

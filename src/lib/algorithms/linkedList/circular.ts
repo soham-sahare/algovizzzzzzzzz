@@ -390,3 +390,151 @@ export function* generateCircularReverseSteps(currentNodes: LinkedListNode[]): G
         message: "Reversed! Tail now points to new Head."
     };
 }
+
+export function* generateCircularCheckSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
+    const nodes = currentNodes;
+    if (nodes.length === 0) {
+         yield { nodes, highlightedNodes: [], pointers: {}, message: "Empty list." };
+         return;
+    }
+
+    // Naive check by traversing to end and seeing if next is head
+    // (Since our data model is an array, we simulate the structure)
+    
+    // Step 1: Head
+    yield {
+        nodes,
+        highlightedNodes: [nodes[0].id],
+        pointers: { [nodes[0].id]: "Head" },
+        lineNumber: 1,
+        message: "Checking Head..."
+    };
+    
+    // Check Tail
+    const tail = nodes[nodes.length - 1];
+    yield {
+        nodes,
+        highlightedNodes: [tail.id],
+        pointers: { [tail.id]: "Tail" },
+        lineNumber: 2,
+        message: "Checking Tail node..."
+    };
+
+    // Verify Link
+    yield {
+        nodes,
+        highlightedNodes: [tail.id, nodes[0].id],
+        pointers: { [tail.id]: "Tail", [nodes[0].id]: "Head" },
+        lineNumber: 3,
+        message: "Tail.next points to Head? Yes. It is Circular."
+    };
+}
+
+export function* generateCircularSplitSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
+     // Tortoise and Hare to find mid
+     let nodes = clone(currentNodes);
+     if (nodes.length < 2) {
+         yield { nodes, highlightedNodes: [], pointers: {}, message: "List too small to split." };
+         return;
+     }
+
+     let slow = 0;
+     let fast = 0;
+     
+     // Visual loop to find mid
+     while (fast < nodes.length - 1 && (fast + 2) < nodes.length) { // Simplified logic for array-based simulation
+         yield {
+             nodes,
+             highlightedNodes: [nodes[slow].id, nodes[fast].id],
+             pointers: { [nodes[slow].id]: "Slow", [nodes[fast].id]: "Fast" },
+             lineNumber: 2,
+             message: "Finding middle..."
+         };
+         slow++;
+         fast += 2;
+     }
+    yield {
+         nodes,
+         highlightedNodes: [nodes[slow].id],
+         pointers: { [nodes[slow].id]: "Mid" },
+         lineNumber: 3,
+         message: "Found middle node."
+     };
+     
+     // Split
+     const head1 = nodes[0];
+     const tail1 = nodes[slow];
+     const head2 = nodes[slow + 1];
+     const tail2 = nodes[nodes.length - 1];
+
+     yield {
+         nodes,
+         highlightedNodes: [tail1.id, head2.id],
+         pointers: { [tail1.id]: "Tail1", [head2.id]: "Head2" },
+         lineNumber: 4,
+         message: "Splitting list here..."
+     };
+     
+     // Visualization note: splitting fully in the UI is hard with one array.
+     // We will conceptually show them as "Split" by color or message.
+     // Or we can just highlight the cut point.
+     
+     yield {
+         nodes,
+         highlightedNodes: [tail1.id, tail2.id],
+         pointers: { [tail1.id]: "Tail1 -> Head1", [tail2.id]: "Tail2 -> Head2" },
+         lineNumber: 5,
+         message: "Lists split into two halves."
+     };
+}
+
+export function* generateJosephusSteps(currentNodes: LinkedListNode[], k: number): Generator<LinkedListStep> {
+    let nodes = clone(currentNodes);
+    if (nodes.length === 0 || k < 1) return;
+
+    let index = 0; // Start at head
+    
+    while (nodes.length > 1) {
+        // Count k steps
+        for(let step = 1; step < k; step++) {
+             // visually traverse
+             yield {
+                nodes: clone(nodes), // keep stable reference if possible, but cloning is safer for safety
+                highlightedNodes: [nodes[index].id],
+                pointers: { [nodes[index].id]: "Curr" },
+                lineNumber: 2,
+                message: `Skipping... (${step}/${k})`
+            };
+            index = (index + 1) % nodes.length;
+        }
+
+        const eliminatedNode = nodes[index];
+        yield {
+            nodes: clone(nodes),
+            highlightedNodes: [eliminatedNode.id],
+            pointers: { [eliminatedNode.id]: "Eliminate" },
+            lineNumber: 3,
+            message: `Eliminating ${eliminatedNode.value}!`
+        };
+
+        nodes.splice(index, 1);
+        // Next person starts from the same index (because list shifted left)
+        index = index % nodes.length;
+
+        yield {
+            nodes: clone(nodes),
+            highlightedNodes: [],
+            pointers: {},
+            lineNumber: 4,
+            message: "Node removed. Circle shrinks."
+        };
+    }
+
+    yield {
+        nodes: clone(nodes),
+        highlightedNodes: [nodes[0].id],
+        pointers: { [nodes[0].id]: "Winner" },
+        lineNumber: 5,
+        message: `Winner is ${nodes[0].value}!`
+    };
+}

@@ -13,9 +13,12 @@ import {
     generateCircularDeleteAtPositionSteps,
     generateCircularDeleteValueSteps,
     generateCircularSearchSteps,
-    generateCircularReverseSteps
+    generateCircularReverseSteps,
+    generateCircularCheckSteps,
+    generateCircularSplitSteps,
+    generateJosephusSteps
 } from "@/lib/algorithms/linkedList/circular";
-import { Plus, Trash2, Play, Pause, Search, Settings, ArrowRightLeft } from "lucide-react";
+import { Plus, Trash2, Play, Pause, Search, Settings, ArrowRightLeft, Split, CheckCircle, Users } from "lucide-react";
 import CodeHighlight from "@/components/visualizations/CodeHighlight";
 
 const INSERT_HEAD_CODE = `function insertHead(val):
@@ -93,11 +96,47 @@ const REVERSE_CODE = `function reverse():
   while curr != head
   head = prev`;
 
+const CHECK_CIRCULAR_CODE = `function isCircular():
+  if !head: return true
+  curr = head.next
+  while curr and curr != head:
+    curr = curr.next
+  return curr == head`;
+
+const SPLIT_CODE = `function split():
+  slow = head, fast = head
+  while fast.next != head and fast.next.next != head:
+    fast = fast.next.next
+    slow = slow.next
+  head1 = head
+  head2 = slow.next
+  slow.next = head1
+  curr = head2
+  while curr.next != head: curr = curr.next
+  curr.next = head2`;
+
+const JOSEPHUS_CODE = `function josephus(k):
+  curr = head
+  while curr.next != curr:
+    for i=1 to k-1: curr = curr.next
+    curr.next = curr.next.next // Eliminate
+  return curr.val`;
+
+const TRAVERSE_CODE = `function traverse():
+  curr = head
+  if !head: return
+  do:
+    print(curr.val)
+    curr = curr.next
+  while curr != head`;
+
 export default function CircularLinkedListPage() {
   const [nodes, setNodes] = useState<LinkedListNode[]>([
       { id: "c1", value: 10 }, 
       { id: "c2", value: 20 }, 
-      { id: "c3", value: 30 }
+      { id: "c3", value: 30 },
+      { id: "c4", value: 40 },
+      { id: "c5", value: 50 },
   ]);
   
   const [steps, setSteps] = useState<LinkedListStep[]>([]);
@@ -115,6 +154,7 @@ export default function CircularLinkedListPage() {
   const [deleteValue, setDeleteValue] = useState("20");
   const [deleteIndex, setDeleteIndex] = useState("0");
   const [searchValue, setSearchValue] = useState("20");
+  const [josephusK, setJosephusK] = useState("2");
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -208,6 +248,30 @@ export default function CircularLinkedListPage() {
    const handleReverse = () => {
       setActiveCode(REVERSE_CODE);
       executeOperation(generateCircularReverseSteps(nodes));
+  };
+  
+  const handleCheckCircular = () => {
+      setActiveCode(CHECK_CIRCULAR_CODE);
+      executeOperation(generateCircularCheckSteps(nodes));
+  };
+
+  const handleSplit = () => {
+      setActiveCode(SPLIT_CODE);
+      executeOperation(generateCircularSplitSteps(nodes));
+  };
+  
+  const handleJosephus = () => {
+      const k = parseInt(josephusK);
+      if(isNaN(k)) return;
+      setActiveCode(JOSEPHUS_CODE);
+      executeOperation(generateJosephusSteps(nodes, k));
+  };
+   const handleTraverse = () => {
+      setActiveCode(TRAVERSE_CODE);
+      // Re-use traverse forward as they are visually defined in search mostly or create specific traverse
+      // Actually let's just use Search logic but without looking for target, just to walk.
+      // Or simplest is reused Check steps which traverse fully.
+      executeOperation(generateCircularCheckSteps(nodes)); // reusing visual run
   };
 
   const currentStepData = steps.length > 0 && currentStep < steps.length 
@@ -348,6 +412,29 @@ export default function CircularLinkedListPage() {
                    />
                    <button onClick={handleSearch} disabled={isProcessing} className="whitespace-nowrap px-3 bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/30 dark:text-blue-200 py-2 rounded text-sm font-medium transition disabled:opacity-50">Search</button>
                 </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                     <button onClick={handleCheckCircular} disabled={isProcessing} className="flex items-center justify-center gap-2 bg-green-100 hover:bg-green-200 text-green-700 dark:bg-green-900/30 dark:text-green-200 py-2 rounded text-sm font-medium transition disabled:opacity-50">
+                        <CheckCircle className="w-4 h-4" /> Check
+                     </button>
+                     <button onClick={handleSplit} disabled={isProcessing} className="flex items-center justify-center gap-2 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200 py-2 rounded text-sm font-medium transition disabled:opacity-50">
+                        <Split className="w-4 h-4" /> Split
+                     </button>
+                </div>
+                
+                 <div className="flex gap-2 border-t border-zinc-200 dark:border-zinc-700 pt-3 mt-1">
+                    <input 
+                        type="number" 
+                        value={josephusK} 
+                        onChange={(e) => setJosephusK(e.target.value)} 
+                        className="w-16 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm"
+                        placeholder="K"
+                    />
+                    <button onClick={handleJosephus} disabled={isProcessing} className="flex-1 flex items-center justify-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-700 dark:bg-amber-900/30 dark:text-amber-200 py-2 rounded text-sm font-medium transition disabled:opacity-50">
+                         <Users className="w-4 h-4" /> Josephus
+                    </button>
+                </div>
+
                  <button onClick={handleReverse} disabled={isProcessing} className="w-full bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white py-2 rounded text-sm font-medium transition flex items-center justify-center gap-2 disabled:opacity-50">
                     <ArrowRightLeft className="w-4 h-4" /> Reverse List
                  </button>

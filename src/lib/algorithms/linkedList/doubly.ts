@@ -402,3 +402,85 @@ export function* generateDoublyReverseSteps(currentNodes: LinkedListNode[]): Gen
         message: "List Reversed!"
     };
 }
+
+export function* generateDoublyTraverseForwardSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
+    const nodes = currentNodes;
+    for (let i = 0; i < nodes.length; i++) {
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            message: `Visiting node ${nodes[i].value}`
+        };
+    }
+    yield { nodes, highlightedNodes: [], pointers: {}, message: "Traversal Complete" };
+}
+
+export function* generateDoublyTraverseBackwardSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
+    const nodes = currentNodes;
+    for (let i = nodes.length - 1; i >= 0; i--) {
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            message: `Visiting node ${nodes[i].value}`
+        };
+    }
+    yield { nodes, highlightedNodes: [], pointers: {}, message: "Backward Traversal Complete" };
+}
+
+export function* generateDoublyInsertBeforeNodeSteps(currentNodes: LinkedListNode[], targetVal: number, newVal: number): Generator<LinkedListStep> {
+     const nodes = clone(currentNodes);
+     let targetIndex = -1;
+
+     // Find target
+     for(let i=0; i<nodes.length; i++) {
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            message: `Searching for ${targetVal}...`
+        };
+        if(nodes[i].value === targetVal) {
+            targetIndex = i;
+            yield {
+                nodes,
+                highlightedNodes: [nodes[i].id],
+                pointers: { [nodes[i].id]: "Target" },
+                message: `Found target ${targetVal} at index ${i}`
+            };
+            break;
+        }
+     }
+
+     if(targetIndex === -1) {
+         yield { nodes, highlightedNodes: [], pointers: {}, message: `Target ${targetVal} not found.` };
+         return;
+     }
+
+     if(targetIndex === 0) {
+         yield* generateDoublyInsertHeadSteps(nodes, newVal);
+         return;
+     }
+
+     const newNode: LinkedListNode = { id: Math.random().toString(36).substr(2, 5), value: newVal };
+     const prevNode = nodes[targetIndex - 1];
+     const targetNode = nodes[targetIndex];
+
+     const newNodesList = [...nodes];
+     newNodesList.splice(targetIndex, 0, newNode);
+
+     yield {
+        nodes: newNodesList,
+        highlightedNodes: [newNode.id],
+        pointers: { [prevNode.id]: "Prev", [newNode.id]: "New", [targetNode.id]: "Target" },
+        message: "Inserting New Node before Target..."
+     };
+
+     yield {
+        nodes: newNodesList,
+        highlightedNodes: [newNode.id],
+        pointers: { [newNode.id]: "New" },
+        message: "Updated pointers (Prev.next, New.prev, New.next, Target.prev)"
+     };
+}
