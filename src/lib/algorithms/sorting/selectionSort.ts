@@ -4,6 +4,7 @@ export type SortingStep = {
     swapping: number[];  // Indices being swapped
     sorted: number[];    // Indices that are sorted
     lineNumber?: number; // For pseudocode highlighting
+    labels?: { [index: number]: string }; // Optional labels for specific indices (e.g., L, R, Mid)
 };
 
 export function* generateSelectionSortSteps(initialArray: number[]): Generator<SortingStep> {

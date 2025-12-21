@@ -91,7 +91,7 @@ export default function ArraysPage() {
               name="Binary Search" 
               description="Search a sorted array by repeatedly dividing the search interval in half." 
               href="/dsa/arrays/searching/binary"
-              difficulty="Easy"
+              difficulty="Medium"
             />
           </div>
         </section>
