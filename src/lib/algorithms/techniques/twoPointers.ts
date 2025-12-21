@@ -1,4 +1,4 @@
-import { SortingStep } from "../../sorting/selectionSort";
+import { SortingStep } from "../sorting/selectionSort";
 
 export function* generateTwoPointersSteps(array: number[], target: number): Generator<SortingStep> {
     const arr = [...array];

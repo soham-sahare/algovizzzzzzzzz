@@ -1,4 +1,4 @@
-import { SortingStep } from "../../sorting/selectionSort";
+import { SortingStep } from "../sorting/selectionSort";
 
 export function* generateSlidingWindowSteps(array: number[], k: number): Generator<SortingStep> {
     const arr = [...array];

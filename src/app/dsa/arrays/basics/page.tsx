@@ -22,9 +22,21 @@ const DELETE_CODE = `function delete(arr, index):
   arr[size-1] = null
   size--`;
 
+const DELETE_BY_VALUE_CODE = `function deleteByValue(arr, value):
+  index = search(arr, value)
+  if index == -1: return
+  delete(arr, index)`;
+
 const UPDATE_CODE = `function update(arr, index, value):
   if index invalid: return
   arr[index] = value`;
+
+const UPDATE_BY_VALUE_CODE = `function updateByValue(arr, oldVal, newVal):
+  for i from 0 to size-1:
+    if arr[i] == oldVal:
+      arr[i] = newVal
+      return i
+  return -1 // Not found`;
 
 const SEARCH_CODE = `function search(arr, value):
   for i from 0 to size-1:
@@ -50,9 +62,12 @@ export default function ArrayBasicsPage() {
   const [insertIndex, setInsertIndex] = useState("0");
   const [insertValue, setInsertValue] = useState("50");
   const [deleteIndex, setDeleteIndex] = useState("0");
+  const [deleteValue, setDeleteValue] = useState("20");
   const [accessIndex, setAccessIndex] = useState("0");
   const [updateValue, setUpdateValue] = useState("99");
   const [searchValue, setSearchValue] = useState("30");
+  const [updateOldValue, setUpdateOldValue] = useState("30");
+  const [updateNewValue, setUpdateNewValue] = useState("88");
 
   const [message, setMessage] = useState("Ready to perform operations.");
 
@@ -143,6 +158,61 @@ export default function ArrayBasicsPage() {
     setActiveLine(undefined);
   };
 
+  const handleDeleteByValue = async () => {
+    setActiveCode(DELETE_BY_VALUE_CODE);
+    setActiveLine(1); // Call search
+    const val = parseInt(deleteValue);
+    if (isNaN(val)) return;
+
+    setMessage(`Searching for ${val} to delete...`);
+    setHighlightType("search");
+
+    let foundIdx = -1;
+    // Simulate search
+    for (let i = 0; i < array.length; i++) {
+        setHighlightIndex(i);
+        await sleep(300);
+        if (array[i] === val) {
+            foundIdx = i;
+            break;
+        }
+    }
+
+    if (foundIdx === -1) {
+        setMessage(`${val} not found.`);
+        setActiveLine(3); // Returns
+        await sleep(1000);
+        setHighlightIndex(undefined);
+        setHighlightType(undefined);
+        setActiveLine(undefined);
+        return;
+    }
+
+    setMessage(`Found ${val} at index ${foundIdx}. Deleting...`);
+    setHighlightIndex(foundIdx);
+    setHighlightType("delete");
+    setActiveLine(4); // Call delete(index) logic visual
+    await sleep(800);
+
+    // Animate shift
+    for (let i = foundIdx; i < array.length - 1; i++) {
+         setHighlightIndex(i);
+         setMessage(`Shifting element at ${i+1} to ${i}...`);
+         await sleep(200);
+    }
+
+    const newArray = [...array];
+    newArray.splice(foundIdx, 1);
+    setArray(newArray);
+    
+    setMessage(`Deleted ${val} from index ${foundIdx}.`);
+    await sleep(500);
+    
+    setHighlightIndex(undefined);
+    setHighlightType(undefined);
+    setActiveLine(undefined);
+  };
+
   const handleUpdate = async () => {
     setActiveCode(UPDATE_CODE);
     setActiveLine(1);
@@ -169,6 +239,52 @@ export default function ArrayBasicsPage() {
     
     setMessage(`Updated index ${idx} to ${val}.`);
     await sleep(500);
+    setHighlightIndex(undefined);
+    setHighlightType(undefined);
+    setActiveLine(undefined);
+  };
+
+  const handleUpdateByValue = async () => {
+    setActiveCode(UPDATE_BY_VALUE_CODE);
+    setActiveLine(1);
+    const oldVal = parseInt(updateOldValue);
+    const newVal = parseInt(updateNewValue);
+    if (isNaN(oldVal) || isNaN(newVal)) return;
+
+    setMessage(`Searching for first occurrence of ${oldVal}...`);
+    setHighlightType("search"); // Reusing search highlight style
+
+    let found = false;
+    setActiveLine(2); // Loop
+    for (let i = 0; i < array.length; i++) {
+        setHighlightIndex(i);
+        setActiveLine(3); // Check match
+        await sleep(400);
+
+        if (array[i] === oldVal) {
+             setMessage(`Found ${oldVal} at index ${i}. Updating to ${newVal}...`);
+             found = true;
+             setHighlightType("access"); // Switch to access/update style
+             
+             setActiveLine(4); // Update
+             await sleep(600);
+
+             const newArray = [...array];
+             newArray[i] = newVal;
+             setArray(newArray);
+             
+             setActiveLine(5); // Return i
+             await sleep(1000);
+             break;
+        }
+    }
+
+    if (!found) {
+        setMessage(`${oldVal} not found in array.`);
+        setActiveLine(6); // Return -1
+        await sleep(1000);
+    }
+
     setHighlightIndex(undefined);
     setHighlightType(undefined);
     setActiveLine(undefined);
@@ -267,10 +383,10 @@ export default function ArrayBasicsPage() {
                     </button>
                 </div>
 
-                {/* Delete */}
+                {/* Delete by Index */}
                 <div className="bg-zinc-50 dark:bg-zinc-900/30 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-sm dark:shadow-none">
                     <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-2">
-                        <Trash2 className="w-4 h-4" /> Delete
+                        <Trash2 className="w-4 h-4" /> Delete (Index)
                     </h3>
                     <input type="number" value={deleteIndex} onChange={(e) => setDeleteIndex(e.target.value)} placeholder="Index" className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-zinc-500" />
                     <button onClick={handleDelete} className="w-full bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-200 text-sm font-medium py-2 rounded transition-colors flex items-center justify-center gap-2">
@@ -278,10 +394,21 @@ export default function ArrayBasicsPage() {
                     </button>
                 </div>
 
-                {/* Update */}
+                {/* Delete by Value */}
                 <div className="bg-zinc-50 dark:bg-zinc-900/30 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-sm dark:shadow-none">
                     <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-2">
-                        <Pencil className="w-4 h-4" /> Update
+                        <Trash2 className="w-4 h-4" /> Delete (Value)
+                    </h3>
+                    <input type="number" value={deleteValue} onChange={(e) => setDeleteValue(e.target.value)} placeholder="Value to delete" className="w-full bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-zinc-500" />
+                    <button onClick={handleDeleteByValue} className="w-full bg-red-100 hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-200 text-sm font-medium py-2 rounded transition-colors flex items-center justify-center gap-2">
+                        Delete
+                    </button>
+                </div>
+
+                {/* Update by Index */}
+                <div className="bg-zinc-50 dark:bg-zinc-900/30 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-sm dark:shadow-none">
+                    <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-2">
+                        <Pencil className="w-4 h-4" /> Update (Index)
                     </h3>
                     <div className="grid grid-cols-2 gap-2">
                         <input type="number" value={accessIndex} onChange={(e) => setAccessIndex(e.target.value)} placeholder="Idx" className="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-zinc-500" />
@@ -289,6 +416,20 @@ export default function ArrayBasicsPage() {
                     </div>
                     <button onClick={handleUpdate} className="w-full bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-foreground text-sm font-medium py-2 rounded transition-colors flex items-center justify-center gap-2">
                         Update
+                    </button>
+                </div>
+
+                {/* Update by Value */}
+                <div className="bg-zinc-50 dark:bg-zinc-900/30 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 space-y-3 shadow-sm dark:shadow-none">
+                    <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-2">
+                        <Pencil className="w-4 h-4" /> Update (Value)
+                    </h3>
+                    <div className="grid grid-cols-2 gap-2">
+                        <input type="number" value={updateOldValue} onChange={(e) => setUpdateOldValue(e.target.value)} placeholder="Old" className="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-zinc-500" />
+                        <input type="number" value={updateNewValue} onChange={(e) => setUpdateNewValue(e.target.value)} placeholder="New" className="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded px-3 py-2 text-sm text-foreground focus:outline-none focus:border-zinc-500" />
+                    </div>
+                    <button onClick={handleUpdateByValue} className="w-full bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-foreground text-sm font-medium py-2 rounded transition-colors flex items-center justify-center gap-2">
+                        Replace
                     </button>
                 </div>
 

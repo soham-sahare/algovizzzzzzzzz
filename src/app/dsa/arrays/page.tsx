@@ -99,7 +99,7 @@ export default function ArraysPage() {
          {/* Techniques Section */}
         <section>
           <div className="flex items-center gap-3 mb-6 pb-2 border-b border-zinc-200 dark:border-zinc-800">
-            <h2 className="text-xl font-semibold text-foreground">Techniques</h2>
+            <h2 className="text-xl font-semibold text-foreground">Algorithms</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <AlgorithmCard 
@@ -108,10 +108,28 @@ export default function ArraysPage() {
               href="/dsa/arrays/techniques/two-pointers"
               difficulty="Medium"
             />
-             <AlgorithmCard 
+            <AlgorithmCard 
               name="Sliding Window" 
               description="Efficiently find subarrays with specific properties." 
               href="/dsa/arrays/techniques/sliding-window"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Kadane's Algorithm" 
+              description="Find the maximum sum contiguous subarray in O(n) time." 
+              href="/dsa/arrays/techniques/kadanes"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Prefix Sum" 
+              description="Precompute sums to allow O(1) range sum queries." 
+              href="/dsa/arrays/techniques/prefix-sum"
+              difficulty="Easy"
+            />
+             <AlgorithmCard 
+              name="Dutch National Flag" 
+              description="Sort an array of 0s, 1s, and 2s in one pass." 
+              href="/dsa/arrays/techniques/dnf"
               difficulty="Medium"
             />
           </div>
