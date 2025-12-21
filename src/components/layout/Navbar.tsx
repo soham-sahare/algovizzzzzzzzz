@@ -21,12 +21,15 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center gap-2 group">
                <div className="w-8 h-8 flex items-center justify-center bg-black dark:bg-white text-white dark:text-black rounded-lg font-bold text-lg transition-transform group-hover:rotate-12">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="transform scale-90">
-                    <path d="M12 2L2 22H22L12 2Z" fill="currentColor" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" className="transform scale-90">
+                    <rect x="2" y="2" width="9" height="9" rx="2" className="text-current opacity-75" />
+                    <rect x="13" y="2" width="9" height="9" rx="2" className="text-current" />
+                    <rect x="13" y="13" width="9" height="9" rx="2" className="text-current opacity-75" />
+                    <rect x="2" y="13" width="9" height="9" rx="2" className="text-current" />
                   </svg>
                </div>
                <span className="font-bold text-lg tracking-tight text-zinc-900 dark:text-zinc-100">
-                 AlgoViz
+                 AlgoVizzzzzzzzz
                </span>
             </Link>
           </div>
