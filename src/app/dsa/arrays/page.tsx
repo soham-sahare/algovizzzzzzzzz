@@ -15,12 +15,27 @@ export default function ArraysPage() {
       </div>
 
       <div className="space-y-12">
+        {/* Fundamentals Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-6 pb-2 border-b border-zinc-200 dark:border-zinc-800">
+            <h2 className="text-xl font-semibold text-foreground">Fundamentals</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+             <AlgorithmCard 
+              name="Basic Operations" 
+              description="Visualize Insert, Delete, Update, and Search operations on dynamic arrays." 
+              href="/dsa/arrays/basics"
+              difficulty="Easy"
+            />
+          </div>
+        </section>
         {/* Sorting Section */}
         <section>
           <div className="flex items-center gap-3 mb-6 pb-2 border-b border-zinc-200 dark:border-zinc-800">
             <h2 className="text-xl font-semibold text-foreground">Sorting Algorithms</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
             <AlgorithmCard 
               name="Bubble Sort" 
               description="Simple comparison-based sorting algorithm." 

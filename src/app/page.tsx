@@ -46,12 +46,6 @@ export default function Home() {
               Start Learning
               <ArrowRight className="w-4 h-4" />
             </Link>
-             <Link 
-              href="/about" 
-              className="inline-flex items-center gap-2 px-6 py-3 bg-background text-foreground rounded-full font-medium text-sm border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
-            >
-              How it works
-            </Link>
           </motion.div>
         </div>
       </section>
