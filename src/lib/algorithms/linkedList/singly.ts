@@ -405,55 +405,130 @@ export function* generateDeleteAllOccurrencesSteps(currentNodes: LinkedListNode[
     let i = 0;
     let foundAny = false;
     
-    while(i < nodes.length) {
+    // Code: while head and head.variant == val... (Simplified to general iterative logic relative to DELETE_ALL_CODE)
+    // DELETE_ALL_CODE lines:
+    // 1. while head and head.val == val: head = head.next
+    // 2. curr = head
+    // 3. while curr and curr.next:
+    // 4.   if curr.next.val == val:
+    // 5.     curr.next = curr.next.next
+    // 6.   else:
+    // 7.     curr = curr.next
+
+    // We will map roughly to this logic.
+    
+    // Handle Head(s)
+    yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 1, message: "Checking head..." };
+    while(nodes.length > 0 && nodes[0].value === value) {
+         yield {
+             nodes,
+             highlightedNodes: [nodes[0].id],
+             pointers: { [nodes[0].id]: "Head" },
+             lineNumber: 1,
+             message: "Head matches value. Removing..."
+         };
+         nodes.splice(0, 1);
+         foundAny = true;
+         yield {
+             nodes: clone(nodes),
+             highlightedNodes: [],
+             pointers: {},
+             lineNumber: 1,
+             message: "Head removed."
+         };
+    }
+    
+    // Handle Rest
+    if(nodes.length === 0) return;
+    
+    yield { nodes, highlightedNodes: [nodes[0].id], pointers: { [nodes[0].id]: "Curr" }, lineNumber: 2, message: "Setting curr = head" };
+    
+    i = 0; // curr index
+    while(i < nodes.length - 1) {
          yield {
              nodes,
              highlightedNodes: [nodes[i].id],
              pointers: { [nodes[i].id]: "Curr" },
-             message: `Checking ${nodes[i].value}...`
+             lineNumber: 3,
+             message: "Checking curr.next..."
          };
          
-         if (nodes[i].value === value) {
+         if (nodes[i+1].value === value) {
              foundAny = true;
              yield {
                  nodes,
-                 highlightedNodes: [nodes[i].id],
-                 pointers: { [nodes[i].id]: "Delete" },
-                 message: "Found match. Deleting..."
+                 highlightedNodes: [nodes[i+1].id],
+                 pointers: { [nodes[i].id]: "Curr", [nodes[i+1].id]: "Next Match" },
+                 lineNumber: 4,
+                 message: "Found match at curr.next!"
              };
              
-             nodes.splice(i, 1);
-             // Don't increment i, as next element shifted down
+             nodes.splice(i+1, 1);
+             
              yield {
                  nodes: clone(nodes),
-                 highlightedNodes: [],
-                 pointers: {},
-                 message: "Node removed."
+                 highlightedNodes: [nodes[i].id],
+                 pointers: { [nodes[i].id]: "Curr" },
+                 lineNumber: 5,
+                 message: "Removed node. curr.next is now skipping deleted node."
              };
          } else {
              i++;
+             yield {
+                 nodes,
+                 highlightedNodes: [nodes[i].id],
+                 pointers: { [nodes[i].id]: "Curr" },
+                 lineNumber: 7,
+                 message: "No match. curr = curr.next"
+             };
          }
     }
     
-    if (!foundAny) {
-         yield { nodes, highlightedNodes: [], pointers: {}, message: "No occurrences found." };
-    } else {
-         yield { nodes, highlightedNodes: [], pointers: {}, message: "Deletion complete." };
-    }
+    yield { nodes, highlightedNodes: [], pointers: {}, message: "Deletion complete." };
 }
+
+// TRAVERSE_CODE:
+// 1. curr = head
+// 2. while curr:
+// 3.   print(curr.val)
+// 4.   curr = curr.next
 
 export function* generateTraverseSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
     const nodes = currentNodes;
+    yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 1, message: "curr = head" };
+    
     for (let i = 0; i < nodes.length; i++) {
         yield {
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
-            message: `Visiting ${nodes[i].value} (${i})`
+            lineNumber: 2,
+            message: `Current node exists.`
+        };
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 3,
+            message: `Visiting ${nodes[i].value}`
+        };
+         yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 4,
+            message: `curr = curr.next`
         };
     }
     yield { nodes, highlightedNodes: [], pointers: {}, message: "Traversal complete." };
 }
+
+// FIND_NTH_CODE:
+// 1. curr = head, count = 0
+// 2. while curr:
+// 3.   if count == n: return curr
+// 4.   curr = curr.next
+// 5.   count++
 
 export function* generateFindNthSteps(currentNodes: LinkedListNode[], n: number): Generator<LinkedListStep> {
     const nodes = currentNodes;
@@ -462,22 +537,51 @@ export function* generateFindNthSteps(currentNodes: LinkedListNode[], n: number)
         return;
     }
     
-    for (let i = 0; i <= n; i++) {
+    yield {  nodes, highlightedNodes: [], pointers: {}, lineNumber: 1, message: "curr = head, count = 0" };
+
+    for (let i = 0; i < nodes.length; i++) {
          yield {
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: `Cnt: ${i}` },
-            message: `Step ${i}...`
+            lineNumber: 3,
+            message: `Checking if count ${i} == ${n}`
+        };
+        
+        if (i === n) {
+             yield {
+                nodes,
+                highlightedNodes: [nodes[i].id],
+                pointers: { [nodes[i].id]: "Found" },
+                lineNumber: 3,
+                message: `Found node at index ${n}: ${nodes[i].value}`
+            };
+            return;
+        }
+
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 4,
+            message: "curr = curr.next"
+        };
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 5,
+            message: "count++"
         };
     }
-    
-    yield {
-        nodes,
-        highlightedNodes: [nodes[n].id],
-        pointers: { [nodes[n].id]: "Found" },
-        message: `Found node at index ${n}: ${nodes[n].value}`
-    };
 }
+
+// FIND_MIDDLE_CODE
+// 1. slow = head, fast = head
+// 2. while fast and fast.next:
+// 3.   slow = slow.next
+// 4.   fast = fast.next.next
+// 5. return slow
 
 export function* generateFindMiddleSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
      const nodes = currentNodes;
@@ -486,24 +590,52 @@ export function* generateFindMiddleSteps(currentNodes: LinkedListNode[]): Genera
      let slow = 0;
      let fast = 0;
      
+     yield {
+        nodes,
+        highlightedNodes: [nodes[slow].id],
+        pointers: { [nodes[slow].id]: "Slow/Fast" },
+        lineNumber: 1,
+        message: "Init slow and fast pointers"
+    };
+
      while (fast < nodes.length && fast + 1 < nodes.length) {
           yield {
             nodes,
             highlightedNodes: [nodes[slow].id, nodes[fast].id],
             pointers: { [nodes[slow].id]: "Slow", [nodes[fast].id]: "Fast" },
-            message: "Moving pointers..."
+            lineNumber: 2,
+            message: "Checking fast and fast.next..."
         };
+        
         slow++;
+        yield {
+             nodes,
+             highlightedNodes: [nodes[slow].id, nodes[fast].id],
+             pointers: { [nodes[slow].id]: "Slow", [nodes[fast].id]: "Fast" },
+             lineNumber: 3,
+             message: "slow = slow.next"
+        };
+        
         fast += 2;
+        // Check bounds before accessing
+        const fastId = fast < nodes.length ? nodes[fast].id : null;
+        yield {
+             nodes,
+             highlightedNodes: [nodes[slow].id, ...(fastId ? [fastId] : [])],
+             pointers: { [nodes[slow].id]: "Slow", ...(fastId ? {[fastId]: "Fast"} : {}) },
+             lineNumber: 4,
+             message: "fast = fast.next.next"
+        };
      }
 
       if (fast < nodes.length) {
-          // Final visual step for fast
+          // Final check loop condition fail
            yield {
             nodes,
             highlightedNodes: [nodes[slow].id, nodes[fast].id],
             pointers: { [nodes[slow].id]: "Slow", [nodes[fast].id]: "Fast" },
-            message: "Fast reached end."
+            lineNumber: 2,
+            message: "Loop condition met/failed."
         };
       }
      
@@ -511,35 +643,72 @@ export function* generateFindMiddleSteps(currentNodes: LinkedListNode[]): Genera
         nodes,
         highlightedNodes: [nodes[slow].id],
         pointers: { [nodes[slow].id]: "Mid" },
+        lineNumber: 5,
         message: `Middle is ${nodes[slow].value}`
     };
 }
 
+// GET_LENGTH_CODE
+// 1. count = 0, curr = head
+// 2. while curr:
+// 3.   count++
+// 4.   curr = curr.next
+// 5. return count
+
 export function* generateGetLengthSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
     const nodes = currentNodes;
     let count = 0;
+    
+    yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 1, message: "Init count = 0" };
+
     for (let i = 0; i < nodes.length; i++) {
          yield {
             nodes,
             highlightedNodes: [nodes[i].id],
-            pointers: { [nodes[i].id]: `Count: ${count + 1}` },
-            message: `Counting node...`
+            pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 2,
+            message: `curr exists: ${nodes[i].value}`
         };
-        count++;
+         count++;
+         yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: `Count: ${count}` },
+            lineNumber: 3,
+            message: `count++ (now ${count})`
+        };
+         yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: `Count: ${count}` },
+            lineNumber: 4,
+            message: `curr = curr.next`
+        };
     }
-     yield { nodes, highlightedNodes: [], pointers: {}, message: `Total Length: ${count}` };
+     yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 5, message: `Total Length: ${count}` };
 }
+
+// UPDATE_CODE
+// 1. curr = head
+// 2. for i=0 to idx-1: curr = curr.next
+// 3. curr.val = val
 
 export function* generateUpdateValueSteps(currentNodes: LinkedListNode[], index: number, newValue: number): Generator<LinkedListStep> {
     const nodes = clone(currentNodes);
-    if (index < 0 || index >= nodes.length) return;
+    if (index < 0 || index >= nodes.length) {
+         yield { nodes, highlightedNodes: [], pointers: {}, message: "Index out of bounds." };
+         return;
+    }
+    
+    yield { nodes, highlightedNodes: [nodes[0].id], pointers: { [nodes[0].id]: "Curr" }, lineNumber: 1, message: "Start at head." };
     
     for(let i=0; i<index; i++) {
          yield {
              nodes,
              highlightedNodes: [nodes[i].id],
              pointers: { [nodes[i].id]: "Curr" },
-             message: "Traversing..."
+             lineNumber: 2,
+             message: "Traversing to index..."
          };
     }
     
@@ -547,7 +716,8 @@ export function* generateUpdateValueSteps(currentNodes: LinkedListNode[], index:
          nodes,
          highlightedNodes: [nodes[index].id],
          pointers: { [nodes[index].id]: "Target" },
-         message: `Found target. Changing ${nodes[index].value} to ${newValue}...`
+         lineNumber: 3,
+         message: `Found idx ${index}. Updating val to ${newValue}...`
     };
     
     nodes[index].value = newValue; // Update in place in the clone
@@ -556,14 +726,24 @@ export function* generateUpdateValueSteps(currentNodes: LinkedListNode[], index:
          nodes,
          highlightedNodes: [nodes[index].id],
          pointers: { [nodes[index].id]: "Updated" },
+         lineNumber: 3,
          message: "Value updated."
     };
 }
 
+// CHECK_SORTED_CODE
+// 1. curr = head
+// 2. while curr and curr.next:
+// 3.   if curr.val > curr.next.val: return false
+// 4.   curr = curr.next
+// 5. return true
+
 export function* generateCheckSortedSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
     const nodes = currentNodes;
+    yield { nodes, highlightedNodes: [nodes[0].id], pointers: { [nodes[0].id]: "Head" }, lineNumber: 1, message: "curr = head" };
+    
     if (nodes.length < 2) {
-         yield { nodes, highlightedNodes: [], pointers: {}, message: "List is sorted (empty or single)." };
+         yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 5, message: "List is sorted (empty or single)." };
          return;
     }
     
@@ -573,7 +753,15 @@ export function* generateCheckSortedSteps(currentNodes: LinkedListNode[]): Gener
              nodes,
              highlightedNodes: [nodes[i].id, nodes[i+1].id],
              pointers: { [nodes[i].id]: "Curr", [nodes[i+1].id]: "Next" },
-             message: `Comparing ${nodes[i].value} <= ${nodes[i+1].value}?`
+             lineNumber: 2,
+             message: `Checking curr and curr.next...`
+         };
+         yield {
+             nodes,
+             highlightedNodes: [nodes[i].id, nodes[i+1].id],
+             pointers: { [nodes[i].id]: "Curr", [nodes[i+1].id]: "Next" },
+             lineNumber: 3,
+             message: `Comparing ${nodes[i].value} > ${nodes[i+1].value}?`
          };
          
          if (nodes[i].value > nodes[i+1].value) {
@@ -581,15 +769,24 @@ export function* generateCheckSortedSteps(currentNodes: LinkedListNode[]): Gener
                  nodes,
                  highlightedNodes: [nodes[i].id],
                  pointers: { [nodes[i].id]: "Violation" },
+                 lineNumber: 3,
                  message: "Found violation! Not sorted."
              };
              sorted = false;
              break;
          }
+         
+         yield {
+             nodes,
+             highlightedNodes: [nodes[i+1].id],
+             pointers: { [nodes[i+1].id]: "Curr" },
+             lineNumber: 4,
+             message: `curr = curr.next`
+         };
     }
     
     if(sorted) {
-        yield { nodes, highlightedNodes: [], pointers: {}, message: "List IS sorted." };
+        yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 5, message: "List IS sorted." };
     }
 }
 

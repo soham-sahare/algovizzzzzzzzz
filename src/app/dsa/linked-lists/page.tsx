@@ -42,6 +42,71 @@ export default function LinkedListsPage() {
           </div>
         </section>
       </div>
+
+      <div className="space-y-12 mt-12">
+        {/* Advanced Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-6 pb-2 border-b border-zinc-200 dark:border-zinc-800">
+            <h2 className="text-xl font-semibold text-foreground">Advanced Algorithms</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+             <AlgorithmCard 
+              name="Reversal Algorithms" 
+              description="Iterative, recursive, and K-group reversal techniques." 
+              href="/dsa/linked-lists/challenges/reversal"
+              difficulty="Hard"
+            />
+            <AlgorithmCard 
+              name="Cycle Detection" 
+              description="Detect cycles using Floyd's Cycle-Finding Algorithm." 
+              href="/dsa/linked-lists/challenges/cycle"
+              difficulty="Hard"
+            />
+             <AlgorithmCard 
+              name="Intersection of Two Lists" 
+              description="Find the node where two linked lists merge." 
+              href="/dsa/linked-lists/challenges/intersection"
+              difficulty="Medium"
+            />
+             <AlgorithmCard 
+              name="Union of Two Lists" 
+              description="Create a new list with unique elements from two lists." 
+              href="/dsa/linked-lists/challenges/union"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Merge Operations" 
+              description="Merge sorted lists, K-sorted lists, and alternating merge." 
+              href="/dsa/linked-lists/challenges/merge"
+              difficulty="Hard"
+            />
+            <AlgorithmCard 
+              name="Palindrome Operations" 
+              description="Check palindrome and convert to palindrome." 
+              href="/dsa/linked-lists/challenges/palindrome"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Reordering Operations" 
+              description="Remove Nth node, Rotate list, Swap pairs, Odd-Even reordering." 
+              href="/dsa/linked-lists/challenges/reordering"
+              difficulty="Hard"
+            />
+            <AlgorithmCard 
+              name="Sorting Algorithms" 
+              description="Merge Sort and Insertion Sort on Linked Lists." 
+              href="/dsa/linked-lists/challenges/sorting"
+              difficulty="Hard"
+            />
+            <AlgorithmCard 
+              name="Cloning Algorithms" 
+              description="Deep Copy and Clone with Random Pointer." 
+              href="/dsa/linked-lists/challenges/cloning"
+              difficulty="Medium"
+            />
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

@@ -24,6 +24,7 @@ export function* generateCircularInsertHeadSteps(currentNodes: LinkedListNode[],
         nodes: [newNode, ...nodes],
         highlightedNodes: [newNode.id],
         pointers: { [newNode.id]: "New" },
+        lineNumber: 1,
         message: `Creating new node ${value}`
     };
 
@@ -32,6 +33,7 @@ export function* generateCircularInsertHeadSteps(currentNodes: LinkedListNode[],
         nodes: [newNode, ...nodes],
         highlightedNodes: [newNode.id, nodes[0].id],
         pointers: { [newNode.id]: "New", [nodes[0].id]: "Old Head" },
+        lineNumber: 5,
         message: "New node points to Old Head."
     };
 
@@ -41,6 +43,7 @@ export function* generateCircularInsertHeadSteps(currentNodes: LinkedListNode[],
         nodes: [newNode, ...nodes],
         highlightedNodes: [nodes[nodes.length - 1].id],
         pointers: { [nodes[nodes.length - 1].id]: "Tail" },
+        lineNumber: 6,
         message: "Locating Tail to update its cycle link..."
     };
 
@@ -49,6 +52,7 @@ export function* generateCircularInsertHeadSteps(currentNodes: LinkedListNode[],
         nodes: [newNode, ...nodes],
         highlightedNodes: [nodes[nodes.length - 1].id, newNode.id],
         pointers: { [newNode.id]: "Head", [nodes[nodes.length - 1].id]: "Tail" },
+        lineNumber: 6,
         message: "Updated Tail to point to New Head."
     };
 }
@@ -68,6 +72,7 @@ export function* generateCircularInsertTailSteps(currentNodes: LinkedListNode[],
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 2,
             message: "Traversing..."
         };
     }
@@ -80,6 +85,7 @@ export function* generateCircularInsertTailSteps(currentNodes: LinkedListNode[],
         nodes: newNodes,
         highlightedNodes: [newNode.id],
         pointers: { [oldTail.id]: "Old Tail", [newNode.id]: "New Tail" },
+        lineNumber: 4,
         message: "Appended new node."
     };
 
@@ -87,6 +93,7 @@ export function* generateCircularInsertTailSteps(currentNodes: LinkedListNode[],
         nodes: newNodes,
         highlightedNodes: [newNode.id],
         pointers: { [newNode.id]: "Tail" },
+        lineNumber: 5,
         message: "New Tail now points back to Head."
     };
 }
@@ -109,6 +116,7 @@ export function* generateCircularDeleteHeadSteps(currentNodes: LinkedListNode[])
         nodes,
         highlightedNodes: [nodes[0].id],
         pointers: { [nodes[0].id]: "Delete" },
+        lineNumber: 1, // Target Head
         message: "Targeting Head."
     };
 
@@ -118,6 +126,7 @@ export function* generateCircularDeleteHeadSteps(currentNodes: LinkedListNode[])
         nodes,
         highlightedNodes: [tail.id],
         pointers: { [tail.id]: "Tail" },
+        lineNumber: 4,
         message: "Tail link must be updated..."
     };
 
@@ -126,6 +135,7 @@ export function* generateCircularDeleteHeadSteps(currentNodes: LinkedListNode[])
         nodes: nodes.slice(1),
         highlightedNodes: [tail.id, nodes[1].id],
         pointers: { [nodes[1].id]: "New Head", [tail.id]: "Tail" },
+        lineNumber: 3,
         message: "Removed Head. Tail now points to New Head."
     };
 }
@@ -144,6 +154,7 @@ export function* generateCircularDeleteTailSteps(currentNodes: LinkedListNode[])
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 4,
             message: "Traversing..."
         };
     }
@@ -155,6 +166,7 @@ export function* generateCircularDeleteTailSteps(currentNodes: LinkedListNode[])
         nodes,
         highlightedNodes: [oldTail.id],
         pointers: { [newTail.id]: "New Tail", [oldTail.id]: "Delete" },
+        lineNumber: 4,
         message: "Found Tail."
     };
 
@@ -162,6 +174,7 @@ export function* generateCircularDeleteTailSteps(currentNodes: LinkedListNode[])
         nodes: nodes.slice(0, nodes.length - 1),
         highlightedNodes: [newTail.id],
         pointers: { [newTail.id]: "Tail" },
+        lineNumber: 5,
         message: "Removed Old Tail. New Tail points to Head."
     };
 }

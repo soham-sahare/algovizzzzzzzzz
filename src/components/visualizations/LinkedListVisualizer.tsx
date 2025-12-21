@@ -6,6 +6,7 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 export interface LinkedListNode {
   id: string; // Unique ID for key
   value: number;
+  next?: string | null; // Optional next pointer ID
 }
 
 interface LinkedListVisualizerProps {

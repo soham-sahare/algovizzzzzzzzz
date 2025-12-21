@@ -15,6 +15,7 @@ export function* generateDoublyInsertHeadSteps(currentNodes: LinkedListNode[], v
         nodes: [newNode, ...nodes],
         highlightedNodes: [newNode.id],
         pointers: { [newNode.id]: "New" },
+        lineNumber: 1,
         message: `Creating new node ${value}`
     };
 
@@ -24,6 +25,7 @@ export function* generateDoublyInsertHeadSteps(currentNodes: LinkedListNode[], v
             nodes: [newNode, ...nodes],
             highlightedNodes: [newNode.id, nodes[0].id],
             pointers: { [newNode.id]: "New", [nodes[0].id]: "Old Head" },
+            lineNumber: 4,
             message: "Setting NewNode.next = Head"
         };
         
@@ -32,6 +34,7 @@ export function* generateDoublyInsertHeadSteps(currentNodes: LinkedListNode[], v
             nodes: [newNode, ...nodes],
             highlightedNodes: [nodes[0].id],
             pointers: { [nodes[0].id]: "Old Head" },
+            lineNumber: 3,
             message: "Setting Head.prev = NewNode"
         };
     }
@@ -41,6 +44,7 @@ export function* generateDoublyInsertHeadSteps(currentNodes: LinkedListNode[], v
         nodes: [newNode, ...nodes],
         highlightedNodes: [newNode.id],
         pointers: { [newNode.id]: "Head" },
+        lineNumber: 5,
         message: "Updating Head pointer"
     };
 }
@@ -60,6 +64,7 @@ export function* generateDoublyInsertTailSteps(currentNodes: LinkedListNode[], v
             nodes: nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 3,
             message: "Traversing to tail..."
         };
     }
@@ -72,6 +77,7 @@ export function* generateDoublyInsertTailSteps(currentNodes: LinkedListNode[], v
         nodes: newNodes,
         highlightedNodes: [lastNode.id, newNode.id],
         pointers: { [lastNode.id]: "Tail", [newNode.id]: "New" },
+        lineNumber: 4,
         message: "Setting Tail.next = NewNode"
     };
     
@@ -79,6 +85,7 @@ export function* generateDoublyInsertTailSteps(currentNodes: LinkedListNode[], v
         nodes: newNodes,
         highlightedNodes: [newNode.id],
         pointers: { [newNode.id]: "New Tail" },
+        lineNumber: 5,
         message: "Setting NewNode.prev = OldTail"
     };
 }
@@ -92,6 +99,7 @@ export function* generateDoublyDeleteHeadSteps(currentNodes: LinkedListNode[]): 
         nodes,
         highlightedNodes: [nodes[0].id],
         pointers: { [nodes[0].id]: "DELETE" },
+        lineNumber: 1,
         message: "Targeting Head for deletion"
     };
 
@@ -100,6 +108,7 @@ export function* generateDoublyDeleteHeadSteps(currentNodes: LinkedListNode[]): 
             nodes: [],
             highlightedNodes: [],
             pointers: {},
+            lineNumber: 2,
             message: "List is now empty."
         };
         return;
@@ -111,6 +120,7 @@ export function* generateDoublyDeleteHeadSteps(currentNodes: LinkedListNode[]): 
         nodes,
         highlightedNodes: [newHead.id],
         pointers: { [nodes[0].id]: "Old", [newHead.id]: "New Head" },
+        lineNumber: 2,
         message: "Move Head to next node"
     };
 
@@ -119,6 +129,7 @@ export function* generateDoublyDeleteHeadSteps(currentNodes: LinkedListNode[]): 
         nodes: nodes.slice(1),
         highlightedNodes: [newHead.id],
         pointers: { [newHead.id]: "Head" },
+        lineNumber: 3,
         message: "Old Head removed. Setting NewHead.prev = null"
     };
 }
@@ -138,6 +149,7 @@ export function* generateDoublyDeleteTailSteps(currentNodes: LinkedListNode[]): 
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 4,
             message: "Traversing to tail..."
         };
     }
@@ -149,6 +161,7 @@ export function* generateDoublyDeleteTailSteps(currentNodes: LinkedListNode[]): 
         nodes,
         highlightedNodes: [tail.id],
         pointers: { [tail.id]: "Tail", [newTail.id]: "New Tail" },
+        lineNumber: 4,
         message: "Found tail."
     };
 
@@ -156,6 +169,7 @@ export function* generateDoublyDeleteTailSteps(currentNodes: LinkedListNode[]): 
         nodes: nodes.slice(0, nodes.length - 1),
         highlightedNodes: [newTail.id],
         pointers: { [newTail.id]: "Tail" },
+        lineNumber: 5,
         message: "Removed tail. Setting NewTail.next = null"
     };
 }
@@ -405,12 +419,21 @@ export function* generateDoublyReverseSteps(currentNodes: LinkedListNode[]): Gen
 
 export function* generateDoublyTraverseForwardSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
     const nodes = currentNodes;
+    yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 1, message: "curr = head" };
     for (let i = 0; i < nodes.length; i++) {
         yield {
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 3,
             message: `Visiting node ${nodes[i].value}`
+        };
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 4,
+            message: `curr = curr.next`
         };
     }
     yield { nodes, highlightedNodes: [], pointers: {}, message: "Traversal Complete" };
@@ -418,12 +441,21 @@ export function* generateDoublyTraverseForwardSteps(currentNodes: LinkedListNode
 
 export function* generateDoublyTraverseBackwardSteps(currentNodes: LinkedListNode[]): Generator<LinkedListStep> {
     const nodes = currentNodes;
+    yield { nodes, highlightedNodes: [], pointers: {}, lineNumber: 1, message: "curr = tail" };
     for (let i = nodes.length - 1; i >= 0; i--) {
         yield {
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 3,
             message: `Visiting node ${nodes[i].value}`
+        };
+        yield {
+            nodes,
+            highlightedNodes: [nodes[i].id],
+            pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 4,
+            message: `curr = curr.prev`
         };
     }
     yield { nodes, highlightedNodes: [], pointers: {}, message: "Backward Traversal Complete" };
@@ -439,6 +471,7 @@ export function* generateDoublyInsertBeforeNodeSteps(currentNodes: LinkedListNod
             nodes,
             highlightedNodes: [nodes[i].id],
             pointers: { [nodes[i].id]: "Curr" },
+            lineNumber: 3,
             message: `Searching for ${targetVal}...`
         };
         if(nodes[i].value === targetVal) {
@@ -447,6 +480,7 @@ export function* generateDoublyInsertBeforeNodeSteps(currentNodes: LinkedListNod
                 nodes,
                 highlightedNodes: [nodes[i].id],
                 pointers: { [nodes[i].id]: "Target" },
+                lineNumber: 3,
                 message: `Found target ${targetVal} at index ${i}`
             };
             break;
@@ -474,6 +508,7 @@ export function* generateDoublyInsertBeforeNodeSteps(currentNodes: LinkedListNod
         nodes: newNodesList,
         highlightedNodes: [newNode.id],
         pointers: { [prevNode.id]: "Prev", [newNode.id]: "New", [targetNode.id]: "Target" },
+        lineNumber: 7,
         message: "Inserting New Node before Target..."
      };
 
@@ -481,6 +516,7 @@ export function* generateDoublyInsertBeforeNodeSteps(currentNodes: LinkedListNod
         nodes: newNodesList,
         highlightedNodes: [newNode.id],
         pointers: { [newNode.id]: "New" },
+        lineNumber: 8,
         message: "Updated pointers (Prev.next, New.prev, New.next, Target.prev)"
      };
 }

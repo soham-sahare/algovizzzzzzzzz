@@ -114,7 +114,27 @@ const REVERSE_CODE = `function reverse():
     curr.next = prev
     prev = curr
     curr = next
-  head = prev`;
+  head = prev
+
+const TRAVERSE_CODE = \`function traverse():
+  curr = head
+  while curr:
+    print(curr.val)
+    curr = curr.next\`;
+
+const SEARCH_CODE = \`function search(val):
+  curr = head
+  while curr:
+    if curr.val == val: return true
+    curr = curr.next
+  return false\`;
+
+const GET_LENGTH_CODE = \`function getLength():
+  count = 0, curr = head
+  while curr:
+    count++
+    curr = curr.next
+  return count\`;`;
 
 
 export default function SinglyLinkedListPage() {
@@ -213,7 +233,7 @@ export default function SinglyLinkedListPage() {
   };
 
   const handleTraverse = () => {
-      // setActiveCode(TRAVERSE_CODE); // Need to add traverse code validly if needed
+      setActiveCode(TRAVERSE_CODE);
       executeOperation(generateTraverseSteps(nodes));
   };
 
@@ -230,6 +250,7 @@ export default function SinglyLinkedListPage() {
   };
 
   const handleGetLength = () => {
+       setActiveCode(GET_LENGTH_CODE);
        executeOperation(generateGetLengthSteps(nodes));
   };
 
@@ -290,7 +311,7 @@ export default function SinglyLinkedListPage() {
   const handleSearch = () => {
      const val = parseInt(inputValue); // Using insert val for search to reduce inputs
      if(isNaN(val)) return;
-     // setActiveCode(SEARCH_CODE);
+     setActiveCode(SEARCH_CODE);
      executeOperation(generateSearchSteps(nodes, val));
   };
 
