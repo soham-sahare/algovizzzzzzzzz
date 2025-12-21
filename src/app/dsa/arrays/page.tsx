@@ -43,6 +43,18 @@ export default function ArraysPage() {
               difficulty="Easy"
             />
             <AlgorithmCard 
+              name="Selection Sort" 
+              description="Repeatedly finds the minimum element and puts it at the beginning." 
+              href="/dsa/arrays/sorting/selection"
+              difficulty="Easy"
+            />
+             <AlgorithmCard 
+              name="Insertion Sort" 
+              description="Builds the sorted array one item at a time." 
+              href="/dsa/arrays/sorting/insertion"
+              difficulty="Easy"
+            />
+            <AlgorithmCard 
               name="Quick Sort" 
               description="Efficient divide-and-conquer sorting algorithm." 
               href="/dsa/arrays/sorting/quick"
