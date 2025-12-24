@@ -66,7 +66,7 @@ export default function KMPPage() {
         found: false,
         lineNumber: undefined,
         lps: Array(pattern.length).fill(0)
-    };
+    } as KMPStep;
     
     // Derived state for visualizing alignment
     // When searching, pattern is aligned such that pattern[j] matches text[i]
