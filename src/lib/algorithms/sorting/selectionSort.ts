@@ -5,6 +5,7 @@ export type SortingStep = {
     sorted: number[];    // Indices that are sorted
     lineNumber?: number; // For pseudocode highlighting
     labels?: { [index: number]: string }; // Optional labels for specific indices (e.g., L, R, Mid)
+    message?: string; // Status message for visualization
 };
 
 export function* generateSelectionSortSteps(initialArray: number[]): Generator<SortingStep> {
