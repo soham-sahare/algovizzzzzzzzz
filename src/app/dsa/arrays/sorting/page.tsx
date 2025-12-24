@@ -76,7 +76,6 @@ const sortingAlgorithms = [
         icon: <SortAsc className="w-6 h-6" />,
         href: "/dsa/arrays/sorting/shell"
     },
-];
     // Radix, Bucket, Shell will be added here
 ];
 

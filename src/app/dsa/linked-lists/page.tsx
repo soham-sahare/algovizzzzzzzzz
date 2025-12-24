@@ -23,7 +23,7 @@ export default function LinkedListsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
              <AlgorithmCard 
               name="List Operations (CRUD)" 
-              description: "Comprehensive Create, Read, Update, Delete for Singly, Doubly, and Circular Lists." 
+              description="Comprehensive Create, Read, Update, Delete for Singly, Doubly, and Circular Lists." 
               href="/dsa/linked-lists/crud"
               difficulty="Easy"
             />
