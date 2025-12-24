@@ -92,7 +92,7 @@ export default function BellmanFordPage() {
     
     const stepData = steps.length > 0 ? steps[currentStep] : {
         adj: adj,
-        distances: {},
+        distances: {} as Record<string, number>,
         parents: {},
         activeEdge: undefined,
         changed: false,
@@ -142,7 +142,6 @@ export default function BellmanFordPage() {
                             nodes={nodes}
                             edges={edges}
                             highlightedEdges={highlightedEdges}
-                            isWeighted={true}
                         />
                          {stepData.negativeCycleNode && (
                              <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">

@@ -165,7 +165,6 @@ export default function MSTPage() {
                             edges={visualizedEdges}
                             highlightedNodes={stepData.visitedNodes}
                             highlightedEdges={highlightedEdges}
-                            isWeighted={true}
                         />
                          <div className="absolute top-4 right-4 bg-white/80 dark:bg-black/50 p-2 rounded backdrop-blur border text-sm font-mono">
                              Total Weight: {stepData.totalWeight}
