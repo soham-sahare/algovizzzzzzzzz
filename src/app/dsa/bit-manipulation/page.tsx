@@ -3,33 +3,26 @@
 import Link from "next/link";
 import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
-import { GitBranch, Network, Layers } from "lucide-react";
+import { Binary, Calculator } from "lucide-react";
 
-const treeImplementations = [
+const bitImplementations = [
   { 
-      name: "Binary Heaps", 
-      description: "Priority queue implementation using arrays (Min/Max Heap).", 
-      icon: <Layers className="w-6 h-6" />, 
-      href: "/dsa/trees/heaps" 
+      name: "Bitwise Operators", 
+      description: "Visualizing standard binary operators: AND, OR, XOR, NOT, Left Shift, Right Shift.", 
+      icon: <Binary className="w-6 h-6" />, 
+      href: "/dsa/bit-manipulation/operators" 
   },
   { 
-      name: "Binary Search Tree (BST)", 
-      description: "Ordered binary tree allowing fast search, insert, and delete operations.", 
-      icon: <Network className="w-6 h-6" />, 
-      href: "/dsa/trees/bst" 
-  },
-  { 
-      name: "AVL Tree", 
-      description: "Self-balancing BST that maintains O(log n) height.", 
-      icon: <GitBranch className="w-6 h-6" />, 
-      href: "/dsa/trees/avl" 
+      name: "Number Properties", 
+      description: "Algorithms to count set bits and check if a number is a power of two using bit tricks.", 
+      icon: <Calculator className="w-6 h-6" />, 
+      href: "/dsa/bit-manipulation/properties" 
   },
 ];
 
-export default function TreesDashboard() {
+export default function BitDashboard() {
   return (
     <div className="min-h-screen px-4 py-12">
-      {/* Trees Configuration */}
       <div className="max-w-7xl mx-auto">
         <BackButton href="/dsa" />
         
@@ -39,15 +32,15 @@ export default function TreesDashboard() {
           className="mb-12 text-center"
         >
           <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
-            Tree Data Structures
+            Bit Manipulation
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Visualize hierarchical data structures.
+             Operating directly on binary representations of data for efficiency.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {treeImplementations.map((impl, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {bitImplementations.map((impl, index) => (
             <motion.div
               key={impl.name}
               initial={{ opacity: 0, scale: 0.95 }}

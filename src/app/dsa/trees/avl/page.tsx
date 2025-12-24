@@ -6,59 +6,39 @@ import TreeVisualizer from "@/components/visualizations/TreeVisualizer";
 import CodeHighlight from "@/components/visualizations/CodeHighlight";
 import { 
     TreeNode, 
-    generateBSTInsertSteps, 
     generateBSTSearchSteps, 
-    generateInorderTraversal,
-    generatePreorderTraversal,
-    generatePostorderTraversal,
-    generateLevelOrderTraversal,
     TreeStep 
 } from "@/lib/algorithms/tree/bst";
+import { 
+    generateAVLInsertSteps 
+} from "@/lib/algorithms/tree/avl";
 import { Play, Pause, Search, Plus, RotateCcw } from "lucide-react";
-import { motion } from "framer-motion";
 
-const INSERT_CODE = `function insert(root, val):
-  if !root: return new Node(val)
-  if val < root.val:
-    root.left = insert(root.left, val)
-  else:
-    root.right = insert(root.right, val)
-  return root`;
+const INSERT_CODE = `function insert(node, key):
+  if !node: return newNode(key)
+  if key < node.key: node.left = insert(node.left, key)
+  else: node.right = insert(node.right, key)
+  
+  balance = getBalance(node)
+  
+  // Left Left
+  if balance > 1 and key < node.left.key:
+    return rotateRight(node)
+  // Right Right
+  if balance < -1 and key > node.right.key:
+    return rotateLeft(node)
+  // Left Right
+  if balance > 1 and key > node.left.key:
+    node.left = rotateLeft(node.left)
+    return rotateRight(node)
+  // Right Left
+  if balance < -1 and key < node.right.key:
+    node.right = rotateRight(node.right)
+    return rotateLeft(node)
+    
+  return node`;
 
-const SEARCH_CODE = `function search(root, val):
-  if !root or root.val == val:
-    return root
-  if val < root.val:
-    return search(root.left, val)
-  return search(root.right, val)`;
-
-const INORDER_CODE = `function inorder(root):
-  if !root: return
-  inorder(root.left)
-  visit(root)
-  inorder(root.right)`;
-
-const PREORDER_CODE = `function preorder(root):
-  if !root: return
-  visit(root)
-  preorder(root.left)
-  preorder(root.right)`;
-
-const POSTORDER_CODE = `function postorder(root):
-  if !root: return
-  postorder(root.left)
-  postorder(root.right)
-  visit(root)`;
-
-const BFS_CODE = `function bfs(root):
-  q = [root]
-  while q:
-    curr = q.pop()
-    visit(curr)
-    if curr.left: q.push(curr.left)
-    if curr.right: q.push(curr.right)`;
-
-export default function BSTPage() {
+export default function AVLPage() {
     // Initial Tree
     const [root, setRoot] = useState<TreeNode | null>(null);
     
@@ -66,18 +46,12 @@ export default function BSTPage() {
     const [steps, setSteps] = useState<TreeStep[]>([]);
     const [currentStep, setCurrentStep] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [speed, setSpeed] = useState(500);
-    const [message, setMessage] = useState("Tree is empty.");
+    const [speed, setSpeed] = useState(600);
+    const [message, setMessage] = useState("AVL Tree Empty");
     const [isProcessing, setIsProcessing] = useState(false);
-    const [activeCode, setActiveCode] = useState(INSERT_CODE);
     
-    const [inputValue, setInputValue] = useState("10");
+    const [inputValue, setInputValue] = useState("30");
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => {
-        // Initial build for demo
-        // Let's keep it empty initially or build a small one
-    }, []);
 
     // Playback
     useEffect(() => {
@@ -89,12 +63,11 @@ export default function BSTPage() {
                     } else {
                         setIsPlaying(false);
                         setIsProcessing(false);
-                        // Apply final state
+                        // Apply final
                         if (steps.length > 0) {
                             const last = steps[steps.length - 1];
-                            // Only update root if it changed structure
                             if (last.root !== undefined) setRoot(last.root);
-                            setMessage("Done");
+                            setMessage("Operation Complete");
                         }
                         return prev;
                     }
@@ -108,7 +81,6 @@ export default function BSTPage() {
         };
     }, [isPlaying, speed, steps]);
     
-    // Step visualizer
     const stepData = steps.length > 0 && currentStep < steps.length 
         ? steps[currentStep] 
         : { root: root, highlightedNodes: [], activeNodeId: undefined, message };
@@ -129,37 +101,14 @@ export default function BSTPage() {
     const handleInsert = () => {
         const val = parseInt(inputValue);
         if (isNaN(val)) return;
-        setActiveCode(INSERT_CODE);
-        executeOperation(generateBSTInsertSteps(root, val));
-        // Randomize next input for convenience
-         setInputValue((Math.floor(Math.random() * 50) + 1).toString());
+        executeOperation(generateAVLInsertSteps(root, val));
+        setInputValue((Math.floor(Math.random() * 50) + 1).toString());
     };
 
     const handleSearch = () => {
         const val = parseInt(inputValue);
         if (isNaN(val)) return;
-        setActiveCode(SEARCH_CODE);
-        executeOperation(generateBSTSearchSteps(root, val));
-    };
-
-    const handleInorder = () => {
-        setActiveCode(INORDER_CODE);
-        executeOperation(generateInorderTraversal(root));
-    };
-
-    const handlePreorder = () => {
-        setActiveCode(PREORDER_CODE);
-        executeOperation(generatePreorderTraversal(root));
-    };
-
-    const handlePostorder = () => {
-        setActiveCode(POSTORDER_CODE);
-        executeOperation(generatePostorderTraversal(root));
-    };
-
-    const handleBFS = () => {
-        setActiveCode(BFS_CODE);
-        executeOperation(generateLevelOrderTraversal(root));
+        executeOperation(generateBSTSearchSteps(root, val)); // Search is same as BST
     };
 
     const handleReset = () => {
@@ -172,14 +121,14 @@ export default function BSTPage() {
         <div className="p-8 max-w-7xl mx-auto space-y-8">
             <BackButton href="/dsa/trees" />
             <div>
-                 <h1 className="text-3xl font-bold text-foreground mb-2">Binary Search Tree (BST)</h1>
-                 <p className="text-muted-foreground">Ordered binary tree where Left {'<'} Root {'<='} Right.</p>
+                 <h1 className="text-3xl font-bold text-foreground mb-2">AVL Tree (Self-Balancing)</h1>
+                 <p className="text-muted-foreground">Self-balancing BST using rotations to maintain O(log n) height.</p>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-6">
                     {/* Visualizer */}
-                     <div className="flex justify-center">
+                     <div className="flex justify-center min-h-[500px]">
                         <TreeVisualizer 
                             root={stepData.root} 
                             highlightedNodes={stepData.highlightedNodes} 
@@ -219,7 +168,7 @@ export default function BSTPage() {
                 <div className="lg:col-span-1 space-y-6">
                      <div className="sticky top-6">
                         <h3 className="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-3">Algorithm Logic</h3>
-                        <CodeHighlight code={activeCode} activeLine={stepData.lineNumber} />
+                        <CodeHighlight code={INSERT_CODE} activeLine={stepData.lineNumber} />
 
                         {/* Controls */}
                         <div className="grid grid-cols-1 gap-4 mt-6">
@@ -242,21 +191,6 @@ export default function BSTPage() {
                                     </button>
                                 </div>
                                 
-                                <div className="grid grid-cols-2 gap-2">
-                                    <button onClick={handleInorder} disabled={isProcessing} className="flex items-center justify-center gap-1 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200 py-2 rounded text-xs font-bold transition disabled:opacity-50">
-                                        Inorder
-                                    </button>
-                                    <button onClick={handlePreorder} disabled={isProcessing} className="flex items-center justify-center gap-1 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200 py-2 rounded text-xs font-bold transition disabled:opacity-50">
-                                        Preorder
-                                    </button>
-                                    <button onClick={handlePostorder} disabled={isProcessing} className="flex items-center justify-center gap-1 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200 py-2 rounded text-xs font-bold transition disabled:opacity-50">
-                                        Postorder
-                                    </button>
-                                    <button onClick={handleBFS} disabled={isProcessing} className="flex items-center justify-center gap-1 bg-pink-100 hover:bg-pink-200 text-pink-700 dark:bg-pink-900/30 dark:text-pink-200 py-2 rounded text-xs font-bold transition disabled:opacity-50">
-                                        Level Order
-                                    </button>
-                                </div>
-
                                 <button onClick={handleReset} disabled={isProcessing} className="w-full flex items-center justify-center gap-2 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 text-foreground py-2 rounded text-sm font-medium transition disabled:opacity-50">
                                     <RotateCcw className="w-4 h-4" /> Clear Tree
                                 </button>

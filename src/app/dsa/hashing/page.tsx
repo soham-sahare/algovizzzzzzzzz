@@ -3,33 +3,26 @@
 import Link from "next/link";
 import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
-import { GitBranch, Network, Layers } from "lucide-react";
+import { GitBranch, ListOrdered } from "lucide-react";
 
-const treeImplementations = [
+const hashingImplementations = [
   { 
-      name: "Binary Heaps", 
-      description: "Priority queue implementation using arrays (Min/Max Heap).", 
-      icon: <Layers className="w-6 h-6" />, 
-      href: "/dsa/trees/heaps" 
-  },
-  { 
-      name: "Binary Search Tree (BST)", 
-      description: "Ordered binary tree allowing fast search, insert, and delete operations.", 
-      icon: <Network className="w-6 h-6" />, 
-      href: "/dsa/trees/bst" 
-  },
-  { 
-      name: "AVL Tree", 
-      description: "Self-balancing BST that maintains O(log n) height.", 
+      name: "Separate Chaining", 
+      description: "Handle collisions by storing multiple elements in the same bucket using a Linked List.", 
       icon: <GitBranch className="w-6 h-6" />, 
-      href: "/dsa/trees/avl" 
+      href: "/dsa/hashing/chaining" 
+  },
+  { 
+      name: "Open Addressing", 
+      description: "Handle collisions by probing for the next available slot (Linear/Quadratic).", 
+      icon: <ListOrdered className="w-6 h-6" />, 
+      href: "/dsa/hashing/open-addressing" 
   },
 ];
 
-export default function TreesDashboard() {
+export default function HashingDashboard() {
   return (
     <div className="min-h-screen px-4 py-12">
-      {/* Trees Configuration */}
       <div className="max-w-7xl mx-auto">
         <BackButton href="/dsa" />
         
@@ -39,15 +32,15 @@ export default function TreesDashboard() {
           className="mb-12 text-center"
         >
           <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
-            Tree Data Structures
+            Hashing
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Visualize hierarchical data structures.
+             Mapping data to fixed-size values for efficient O(1) average lookup.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {treeImplementations.map((impl, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {hashingImplementations.map((impl, index) => (
             <motion.div
               key={impl.name}
               initial={{ opacity: 0, scale: 0.95 }}

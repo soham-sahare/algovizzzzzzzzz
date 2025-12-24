@@ -3,33 +3,48 @@
 import Link from "next/link";
 import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
-import { GitBranch, Network, Layers } from "lucide-react";
+import { Network, Share2, CornerDownRight } from "lucide-react";
 
-const treeImplementations = [
+const graphImplementations = [
   { 
-      name: "Binary Heaps", 
-      description: "Priority queue implementation using arrays (Min/Max Heap).", 
-      icon: <Layers className="w-6 h-6" />, 
-      href: "/dsa/trees/heaps" 
-  },
-  { 
-      name: "Binary Search Tree (BST)", 
-      description: "Ordered binary tree allowing fast search, insert, and delete operations.", 
+      name: "Graph Builder", 
+      description: "Sandbox to create, edit, and visualize directed/undirected weighted graphs.", 
       icon: <Network className="w-6 h-6" />, 
-      href: "/dsa/trees/bst" 
+      href: "/dsa/graphs/builder" 
   },
   { 
-      name: "AVL Tree", 
-      description: "Self-balancing BST that maintains O(log n) height.", 
-      icon: <GitBranch className="w-6 h-6" />, 
-      href: "/dsa/trees/avl" 
+      name: "Breadth-First Search (BFS)", 
+      description: "Level-order traversal useful for finding shortest paths in unweighted graphs.", 
+      icon: <Share2 className="w-6 h-6" />, 
+      href: "/dsa/graphs/bfs" 
+  },
+  { 
+      name: "Depth-First Search (DFS)", 
+      description: "Depth-first traversal useful for path finding, cycle detection, and topological sorting.", 
+      icon: <CornerDownRight className="w-6 h-6" />, 
+      href: "/dsa/graphs/dfs" 
+  },
+  { 
+      name: "Dijkstra's Algorithm", 
+      description: "Finds the shortest path between nodes in a graph with non-negative edge weights.", 
+      icon: <Network className="w-6 h-6" />, 
+  { 
+      name: "Topological Sort", 
+      description: "Linear ordering of vertices in a DAG where for every edge u->v, u comes before v.", 
+      icon: <Network className="w-6 h-6" />, 
+      href: "/dsa/graphs/topological-sort" 
+  },
+  { 
+      name: "Dijkstra's Algorithm", 
+      description: "Finds the shortest path between nodes in a graph with non-negative edge weights.", 
+      icon: <Network className="w-6 h-6" />, 
+      href: "/dsa/graphs/dijkstra" 
   },
 ];
 
-export default function TreesDashboard() {
+export default function GraphsDashboard() {
   return (
     <div className="min-h-screen px-4 py-12">
-      {/* Trees Configuration */}
       <div className="max-w-7xl mx-auto">
         <BackButton href="/dsa" />
         
@@ -39,15 +54,16 @@ export default function TreesDashboard() {
           className="mb-12 text-center"
         >
           <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
-            Tree Data Structures
+            Graph Algorithms
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Visualize hierarchical data structures.
+             Explore nodes, edges, DFS, BFS, and shortest paths.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {treeImplementations.map((impl, index) => (
+          {/* Graph impls defined in chunks above */}
+          {graphImplementations.map((impl, index) => (
             <motion.div
               key={impl.name}
               initial={{ opacity: 0, scale: 0.95 }}

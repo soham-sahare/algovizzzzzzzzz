@@ -3,33 +3,26 @@
 import Link from "next/link";
 import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
-import { GitBranch, Network, Layers } from "lucide-react";
+import { ArrowLeftRight, Search } from "lucide-react";
 
-const treeImplementations = [
+const stringImplementations = [
   { 
-      name: "Binary Heaps", 
-      description: "Priority queue implementation using arrays (Min/Max Heap).", 
-      icon: <Layers className="w-6 h-6" />, 
-      href: "/dsa/trees/heaps" 
+      name: "Basic Operations", 
+      description: "Fundamental string manipulations like Reversal and Palindrome Checking using Two Pointers.", 
+      icon: <ArrowLeftRight className="w-6 h-6" />, 
+      href: "/dsa/strings/basics" 
   },
   { 
-      name: "Binary Search Tree (BST)", 
-      description: "Ordered binary tree allowing fast search, insert, and delete operations.", 
-      icon: <Network className="w-6 h-6" />, 
-      href: "/dsa/trees/bst" 
-  },
-  { 
-      name: "AVL Tree", 
-      description: "Self-balancing BST that maintains O(log n) height.", 
-      icon: <GitBranch className="w-6 h-6" />, 
-      href: "/dsa/trees/avl" 
+      name: "KMP Algorithm", 
+      description: "Knuth-Morris-Pratt pattern matching algorithm using the LPS array.", 
+      icon: <Search className="w-6 h-6" />, 
+      href: "/dsa/strings/kmp" 
   },
 ];
 
-export default function TreesDashboard() {
+export default function StringsDashboard() {
   return (
     <div className="min-h-screen px-4 py-12">
-      {/* Trees Configuration */}
       <div className="max-w-7xl mx-auto">
         <BackButton href="/dsa" />
         
@@ -39,15 +32,15 @@ export default function TreesDashboard() {
           className="mb-12 text-center"
         >
           <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
-            Tree Data Structures
+            String Algorithms
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Visualize hierarchical data structures.
+             Techniques for manipulating and searching within sequences of characters.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {treeImplementations.map((impl, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {stringImplementations.map((impl, index) => (
             <motion.div
               key={impl.name}
               initial={{ opacity: 0, scale: 0.95 }}

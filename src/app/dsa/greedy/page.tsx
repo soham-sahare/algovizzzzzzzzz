@@ -3,33 +3,26 @@
 import Link from "next/link";
 import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
-import { GitBranch, Network, Layers } from "lucide-react";
+import { Clock, FileCode } from "lucide-react";
 
-const treeImplementations = [
+const greedyImplementations = [
   { 
-      name: "Binary Heaps", 
-      description: "Priority queue implementation using arrays (Min/Max Heap).", 
-      icon: <Layers className="w-6 h-6" />, 
-      href: "/dsa/trees/heaps" 
+      name: "Activity Selection", 
+      description: "Select the maximum number of non-overlapping activities performed by a single person.", 
+      icon: <Clock className="w-6 h-6" />, 
+      href: "/dsa/greedy/activity-selection" 
   },
   { 
-      name: "Binary Search Tree (BST)", 
-      description: "Ordered binary tree allowing fast search, insert, and delete operations.", 
-      icon: <Network className="w-6 h-6" />, 
-      href: "/dsa/trees/bst" 
-  },
-  { 
-      name: "AVL Tree", 
-      description: "Self-balancing BST that maintains O(log n) height.", 
-      icon: <GitBranch className="w-6 h-6" />, 
-      href: "/dsa/trees/avl" 
+      name: "Huffman Coding", 
+      description: "Lossless data compression algorithm that assigns variable-length codes based on frequency.", 
+      icon: <FileCode className="w-6 h-6" />, 
+      href: "/dsa/greedy/huffman" 
   },
 ];
 
-export default function TreesDashboard() {
+export default function GreedyDashboard() {
   return (
     <div className="min-h-screen px-4 py-12">
-      {/* Trees Configuration */}
       <div className="max-w-7xl mx-auto">
         <BackButton href="/dsa" />
         
@@ -39,15 +32,15 @@ export default function TreesDashboard() {
           className="mb-12 text-center"
         >
           <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
-            Tree Data Structures
+            Greedy Algorithms
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Visualize hierarchical data structures.
+             Making the locally optimal choice at each stage with the hope of finding a global optimum.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {treeImplementations.map((impl, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {greedyImplementations.map((impl, index) => (
             <motion.div
               key={impl.name}
               initial={{ opacity: 0, scale: 0.95 }}

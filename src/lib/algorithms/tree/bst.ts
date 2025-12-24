@@ -2,6 +2,7 @@
 export interface TreeNode {
     id: string; // Unique ID for visualization key
     value: number;
+    label?: string; // Optional display label (e.g., for Huffman "a:5")
     left: TreeNode | null;
     right: TreeNode | null;
     x?: number; // Optional visual coordinates if pre-calculated
@@ -164,4 +165,99 @@ export function* generateInorderTraversal(root: TreeNode | null): Generator<Tree
      }
      
      yield { root, highlightedNodes: visitOrder, message: "Traversal Complete", lineNumber: 4 };
+}
+
+export function* generatePreorderTraversal(root: TreeNode | null): Generator<TreeStep> {
+    const visitOrder: string[] = [];
+    const stack: TreeNode[] = [];
+    
+    if (root) stack.push(root);
+
+    yield { root, highlightedNodes: [], message: "Starting Preorder (Root, Left, Right)", lineNumber: 1 };
+
+    while (stack.length > 0) {
+        const curr = stack.pop()!;
+        visitOrder.push(curr.id);
+        
+        yield { 
+            root, 
+            highlightedNodes: visitOrder, 
+            activeNodeId: curr.id,
+            message: `Visit ${curr.value}`, 
+            lineNumber: 2 
+        };
+
+        // Push right first so left is processed first
+        if (curr.right) {
+             yield { root, highlightedNodes: visitOrder, activeNodeId: curr.right.id, message: `Push Right Child ${curr.right.value} to Stack` };
+             stack.push(curr.right);
+        }
+        if (curr.left) {
+             yield { root, highlightedNodes: visitOrder, activeNodeId: curr.left.id, message: `Push Left Child ${curr.left.value} to Stack` };
+             stack.push(curr.left);
+        }
+    }
+    yield { root, highlightedNodes: visitOrder, message: "Traversal Complete", lineNumber: 3 };
+}
+
+export function* generatePostorderTraversal(root: TreeNode | null): Generator<TreeStep> {
+    // Two-stack method or recursive simulation
+    // Let's use recursive simulation with a stack to track 'visited' state or just simple recursion generator
+    
+    const visitOrder: string[] = [];
+    
+    function* postorderRec(node: TreeNode | null): Generator<TreeStep> {
+        if (!node) return;
+        
+        yield { root, highlightedNodes: visitOrder, activeNodeId: node.id, message: `Go Left from ${node.value}`, lineNumber: 2 };
+        yield* postorderRec(node.left);
+        
+        yield { root, highlightedNodes: visitOrder, activeNodeId: node.id, message: `Go Right from ${node.value}`, lineNumber: 3 };
+        yield* postorderRec(node.right);
+        
+        visitOrder.push(node.id);
+        yield { 
+            root, 
+            highlightedNodes: visitOrder, 
+            activeNodeId: node.id,
+            message: `Visit ${node.value}`, 
+            lineNumber: 4 
+        };
+    }
+
+    yield { root, highlightedNodes: [], message: "Starting Postorder (Left, Right, Root)", lineNumber: 1 };
+    if (root) yield* postorderRec(root);
+    yield { root, highlightedNodes: visitOrder, message: "Traversal Complete", lineNumber: 5 };
+}
+
+export function* generateLevelOrderTraversal(root: TreeNode | null): Generator<TreeStep> {
+    const visitOrder: string[] = [];
+    const queue: TreeNode[] = [];
+    
+    if (root) queue.push(root);
+    
+    yield { root, highlightedNodes: [], message: "Starting Level Order (BFS)", lineNumber: 1 };
+
+    while (queue.length > 0) {
+        const curr = queue.shift()!;
+        visitOrder.push(curr.id);
+        
+        yield { 
+            root, 
+            highlightedNodes: visitOrder, 
+            activeNodeId: curr.id,
+            message: `Visit ${curr.value}`, 
+            lineNumber: 2 
+        };
+
+        if (curr.left) {
+            queue.push(curr.left);
+            yield { root, highlightedNodes: visitOrder, activeNodeId: curr.left.id, message: `Enqueue Left ${curr.left.value}`, lineNumber: 3 };
+        }
+        if (curr.right) {
+            queue.push(curr.right);
+            yield { root, highlightedNodes: visitOrder, activeNodeId: curr.right.id, message: `Enqueue Right ${curr.right.value}`, lineNumber: 4 };
+        }
+    }
+    yield { root, highlightedNodes: visitOrder, message: "Traversal Complete", lineNumber: 5 };
 }

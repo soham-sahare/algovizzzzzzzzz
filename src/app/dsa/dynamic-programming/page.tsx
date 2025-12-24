@@ -3,33 +3,32 @@
 import Link from "next/link";
 import BackButton from "@/components/ui/BackButton";
 import { motion } from "framer-motion";
-import { GitBranch, Network, Layers } from "lucide-react";
+import { Calculator, Package, Grid } from "lucide-react";
 
-const treeImplementations = [
+const dpImplementations = [
   { 
-      name: "Binary Heaps", 
-      description: "Priority queue implementation using arrays (Min/Max Heap).", 
-      icon: <Layers className="w-6 h-6" />, 
-      href: "/dsa/trees/heaps" 
+      name: "Fibonacci Sequence", 
+      description: "Classic introduction to DP. Compare Recursion, Memoization, and Tabulation.", 
+      icon: <Calculator className="w-6 h-6" />, 
+      href: "/dsa/dynamic-programming/fibonacci" 
   },
   { 
-      name: "Binary Search Tree (BST)", 
-      description: "Ordered binary tree allowing fast search, insert, and delete operations.", 
-      icon: <Network className="w-6 h-6" />, 
-      href: "/dsa/trees/bst" 
+      name: "0/1 Knapsack Problem", 
+      description: "Maximize value within a weight limit. Visualized using a tabulation grid.", 
+      icon: <Package className="w-6 h-6" />, 
+      href: "/dsa/dynamic-programming/knapsack" 
   },
   { 
-      name: "AVL Tree", 
-      description: "Self-balancing BST that maintains O(log n) height.", 
-      icon: <GitBranch className="w-6 h-6" />, 
-      href: "/dsa/trees/avl" 
+      name: "Longest Common Subsequence", 
+      description: "Find the longest subsequence present in two sequences. Grid visualization.", 
+      icon: <Grid className="w-6 h-6" />, 
+      href: "/dsa/dynamic-programming/lcs" 
   },
 ];
 
-export default function TreesDashboard() {
+export default function DPDashboard() {
   return (
     <div className="min-h-screen px-4 py-12">
-      {/* Trees Configuration */}
       <div className="max-w-7xl mx-auto">
         <BackButton href="/dsa" />
         
@@ -39,15 +38,15 @@ export default function TreesDashboard() {
           className="mb-12 text-center"
         >
           <h1 className="text-4xl font-bold tracking-tight text-foreground mb-4">
-            Tree Data Structures
+            Dynamic Programming
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Visualize hierarchical data structures.
+             Optimization by breaking problems into simpler sub-problems.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {treeImplementations.map((impl, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {dpImplementations.map((impl, index) => (
             <motion.div
               key={impl.name}
               initial={{ opacity: 0, scale: 0.95 }}

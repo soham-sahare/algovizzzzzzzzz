@@ -171,7 +171,7 @@ export default function TreeVisualizer({
                             }}
                             className="text-sm shadow-sm dark:text-black" // Force text black for visibility on white/light nodes in dark mode if needed
                         >
-                            {node.value}
+                            {node.label ?? node.value}
                         </motion.div>
                     );
                 })}
