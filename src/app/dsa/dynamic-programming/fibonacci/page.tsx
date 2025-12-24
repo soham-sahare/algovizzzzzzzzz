@@ -44,8 +44,8 @@ export default function FibonacciPage() {
 
     const stepData = steps.length > 0 ? steps[currentStep] : { 
         table: new Array(n + 1).fill(0),
-        activeIndices: [],
-        highlightedIndices: [],
+        activeIndices: [] as number[],
+        highlightedIndices: [] as number[],
         message: "Ready",
         lineNumber: undefined
     };
