@@ -24,15 +24,24 @@ const graphImplementations = [
       icon: <CornerDownRight className="w-6 h-6" />, 
       href: "/dsa/graphs/dfs" 
   },
-  { 
-      name: "Dijkstra's Algorithm", 
-      description: "Finds the shortest path between nodes in a graph with non-negative edge weights.", 
-      icon: <Network className="w-6 h-6" />, 
+
   { 
       name: "Topological Sort", 
       description: "Linear ordering of vertices in a DAG where for every edge u->v, u comes before v.", 
       icon: <Network className="w-6 h-6" />, 
       href: "/dsa/graphs/topological-sort" 
+  },
+  { 
+      name: "Minimum Spanning Tree", 
+      description: "Finds the subset of edges calculating the minimum total weight to connect all vertices (Prim's & Kruskal's).", 
+      icon: <Network className="w-6 h-6" />, 
+      href: "/dsa/graphs/mst" 
+  },
+  { 
+      name: "Bellman-Ford Algorithm", 
+      description: "Computes shortest paths from a single source node to all other nodes, accommodating negative edge weights.", 
+      icon: <Network className="w-6 h-6" />, 
+      href: "/dsa/graphs/bellman-ford" 
   },
   { 
       name: "Dijkstra's Algorithm", 
