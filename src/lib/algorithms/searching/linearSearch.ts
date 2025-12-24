@@ -24,3 +24,11 @@ export function* generateLinearSearchSteps(array: number[], target: number): Gen
     // Line 4: return -1
     yield { array: [...array], comparing: [], swapping: [], sorted: [], lineNumber: 4 };
 }
+
+export interface SearchingStep {
+    array: number[];
+    indices: number[];
+    message: string;
+    found: boolean;
+    lineNumber?: number;
+}

@@ -13,6 +13,12 @@ const stringImplementations = [
       href: "/dsa/strings/basics" 
   },
   { 
+      name: "Rabin-Karp Algorithm", 
+      description: "String searching algorithm using hashing (Rolling Hash) to find patterns.", 
+      icon: <Search className="w-6 h-6" />, 
+      href: "/dsa/strings/rabin-karp" 
+  },
+  { 
       name: "KMP Algorithm", 
       description: "Knuth-Morris-Pratt pattern matching algorithm using the LPS array.", 
       icon: <Search className="w-6 h-6" />, 
