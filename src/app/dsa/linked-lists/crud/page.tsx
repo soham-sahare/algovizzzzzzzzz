@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import BackButton from "@/components/ui/BackButton";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, RotateCcw, Plus, Trash, Edit, Search, ArrowRight, ArrowLeft } from "lucide-react";
-import { generateListCRUDSteps, ListCRUDStep } from "@/lib/algorithms/linkedList/crud";
+import { generateListCRUDSteps, ListCRUDStep, VisualNode } from "@/lib/algorithms/linkedList/crud";
 
 export default function LinkedListCRUDPage() {
     // State
@@ -78,7 +78,7 @@ export default function LinkedListCRUDPage() {
     };
 
     const stepData = steps.length > 0 ? steps[currentStep] : {
-        nodes: values.map((v, i) => ({ id: `init-${i}`, value: v, nextId: null })), // simplified init
+        nodes: values.map((v, i) => ({ id: `init-${i}`, value: v, nextId: null } as VisualNode)), // simplified init
         pointers: [],
         message: "Select an operation"
     };
