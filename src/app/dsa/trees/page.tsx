@@ -24,6 +24,18 @@ const treeImplementations = [
       icon: <GitBranch className="w-6 h-6" />, 
       href: "/dsa/trees/avl" 
   },
+  { 
+      name: "Segment Tree", 
+      description: "Tree data structure for storing intervals or segments.", 
+      icon: <GitBranch className="w-6 h-6" />, 
+      href: "/dsa/trees/segment-tree" 
+  },
+  { 
+      name: "Fenwick Tree (BIT)", 
+      description: "Data structure that can efficiently update elements and calculate prefix sums.", 
+      icon: <GitBranch className="w-6 h-6" />, 
+      href: "/dsa/trees/fenwick-tree" 
+  },
 ];
 
 export default function TreesDashboard() {

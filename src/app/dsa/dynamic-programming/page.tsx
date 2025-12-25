@@ -24,6 +24,24 @@ const dpImplementations = [
       icon: <Grid className="w-6 h-6" />, 
       href: "/dsa/dynamic-programming/lcs" 
   },
+  { 
+      name: "Longest Increasing Subsequence", 
+      description: "Find the length of the longest strictly increasing subsequence.", 
+      icon: <Grid className="w-6 h-6" />, 
+      href: "/dsa/dynamic-programming/lis" 
+  },
+  { 
+      name: "Coin Change Problem", 
+      description: "Find minimum number of coins to make a distinct amount.", 
+      icon: <Grid className="w-6 h-6" />, 
+      href: "/dsa/dynamic-programming/coin-change" 
+  },
+  { 
+      name: "Edit Distance (Levenshtein)", 
+      description: "Calculate minimum operations to transform one string into another.", 
+      icon: <Grid className="w-6 h-6" />, 
+      href: "/dsa/dynamic-programming/edit-distance" 
+  },
 ];
 
 export default function DPDashboard() {

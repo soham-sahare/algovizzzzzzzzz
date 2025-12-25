@@ -49,6 +49,24 @@ const graphImplementations = [
       icon: <Network className="w-6 h-6" />, 
       href: "/dsa/graphs/dijkstra" 
   },
+  { 
+      name: "Union Find (Disjoint Set)", 
+      description: "Data structure for tracking set elements partitioned into disjoint subsets.", 
+      icon: <Network className="w-6 h-6" />, 
+      href: "/dsa/graphs/union-find" 
+  },
+  { 
+      name: "Floyd-Warshall Algorithm", 
+      description: "All-Pairs Shortest Path algorithm for finding shortest paths in a weighted graph.", 
+      icon: <Network className="w-6 h-6" />, 
+      href: "/dsa/graphs/floyd-warshall" 
+  },
+  { 
+      name: "Strongly Connected Components", 
+      description: "Find sets of vertices in a directed graph where every vertex is reachable from every other vertex (Kosaraju's).", 
+      icon: <Network className="w-6 h-6" />, 
+      href: "/dsa/graphs/scc" 
+  },
 ];
 
 export default function GraphsDashboard() {

@@ -18,6 +18,12 @@ const backtrackingImplementations = [
       icon: <Grid3X3 className="w-6 h-6" />, 
       href: "/dsa/backtracking/sudoku" 
   },
+  { 
+      name: "Rat in a Maze", 
+      description: "Find a path from start to destination in a grid with obstacles.", 
+      icon: <Grid3X3 className="w-6 h-6" />, 
+      href: "/dsa/backtracking/rat-maze" 
+  },
 ];
 
 export default function BacktrackingDashboard() {
