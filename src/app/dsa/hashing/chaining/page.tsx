@@ -85,7 +85,7 @@ export default function SeparateChainingPage() {
                      <div className="border rounded-lg bg-zinc-50 dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 p-8 min-h-[400px]">
                         <HashChainingVisualizer 
                             buckets={stepData.buckets}
-                            activeBucket={stepData.activeBucket}
+                            activeBucketIndex={stepData.activeBucket}
                             activeNode={stepData.activeNode}
                         />
                      </div>
