@@ -560,8 +560,8 @@ export function* generateMergeAlternateSteps(
     };
 
     while (curr1 && curr2) {
-        let next1 = curr1.next ? nodes.find(n => n.id === curr1!.next) : undefined;
-        let next2 = curr2.next ? nodes.find(n => n.id === curr2!.next) : undefined;
+        let next1: LinkedListNode | undefined = curr1.next ? nodes.find(n => n.id === curr1!.next) : undefined;
+        let next2: LinkedListNode | undefined = curr2.next ? nodes.find(n => n.id === curr2!.next) : undefined;
 
         curr1.next = curr2.id;
         yield {

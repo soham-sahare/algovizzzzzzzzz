@@ -213,3 +213,15 @@ export function* generatePowerOfTwoSteps(n: number): Generator<BitStep> {
     }
 }
 
+
+function getMessageOp(op: string): string {
+    switch(op) {
+        case 'AND': return '&';
+        case 'OR': return '|';
+        case 'XOR': return '^';
+        case 'LSHIFT': return '<<';
+        case 'RSHIFT': return '>>';
+        case 'NOT': return '~';
+        default: return op;
+    }
+}

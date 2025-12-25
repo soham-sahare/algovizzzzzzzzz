@@ -123,7 +123,7 @@ export function* generateSlidingWindowMaxSteps(nums: number[], k: number): Gener
 
         // Step 2: Remove smaller elements from rear
         while (deque.length > 0 && nums[deque[deque.length - 1]] < nums[i]) {
-            const popped = deque.pop();
+            const popped = deque.pop()!;
              yield {
                 array: nums,
                 windowStart: Math.max(0, windowStart),

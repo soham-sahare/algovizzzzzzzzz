@@ -114,27 +114,27 @@ const REVERSE_CODE = `function reverse():
     curr.next = prev
     prev = curr
     curr = next
-  head = prev
+  head = prev`;
 
-const TRAVERSE_CODE = \`function traverse():
+const TRAVERSE_CODE = `function traverse():
   curr = head
   while curr:
     print(curr.val)
-    curr = curr.next\`;
+    curr = curr.next`;
 
-const SEARCH_CODE = \`function search(val):
+const SEARCH_CODE = `function search(val):
   curr = head
   while curr:
     if curr.val == val: return true
     curr = curr.next
-  return false\`;
+  return false`;
 
-const GET_LENGTH_CODE = \`function getLength():
+const GET_LENGTH_CODE = `function getLength():
   count = 0, curr = head
   while curr:
     count++
     curr = curr.next
-  return count\`;`;
+  return count`;
 
 
 export default function SinglyLinkedListPage() {

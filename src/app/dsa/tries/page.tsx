@@ -38,7 +38,7 @@ const CODES = {
 };
 
 export default function TriePage() {
-    const [trieRoot, setTrieRoot] = useState<TrieNode>({ id: "root", value: "", children: {}, isEndOfWord: false });
+    const [trieRoot, setTrieRoot] = useState<TrieNode>({ id: "root", children: {}, isEndOfWord: false });
     const [inputValue, setInputValue] = useState("");
     const [mode, setMode] = useState<'INSERT' | 'SEARCH' | 'STARTSWITH' | 'DELETE'>('INSERT');
 
@@ -88,7 +88,7 @@ export default function TriePage() {
     };
 
     const handleReset = () => {
-        setTrieRoot({ id: "root", value: "", children: {}, isEndOfWord: false });
+        setTrieRoot({ id: "root", children: {}, isEndOfWord: false });
         setSteps([]);
         setCurrentStep(0);
         setIsPlaying(false);
@@ -118,8 +118,8 @@ export default function TriePage() {
                          <div className="absolute inset-0 overflow-auto">
                             <TrieVisualizer 
                                 root={stepData.root}
-                                activeNodeId={stepData.activeNodeId}
-                                highlightPath={stepData.highlightPath}
+                                activeNodeId={stepData.activeNodeId ?? undefined}
+                                highlightedPath={stepData.highlightPath}
                             />
                          </div>
                      </div>
