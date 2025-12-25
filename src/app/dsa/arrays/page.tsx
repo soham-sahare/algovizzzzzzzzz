@@ -66,10 +66,34 @@ export default function ArraysPage() {
               href="/dsa/arrays/sorting/merge"
               difficulty="Medium"
             />
-             <AlgorithmCard 
+            <AlgorithmCard 
               name="Heap Sort" 
               description="Comparison-based sorting technique based on Binary Heap." 
               href="/dsa/arrays/sorting/heap"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Counting Sort" 
+              description="Integer sorting algorithm that counts number of objects." 
+              href="/dsa/arrays/sorting/counting"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Radix Sort" 
+              description="Non-comparative integer sorting algorithm." 
+              href="/dsa/arrays/sorting/radix"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Bucket Sort" 
+              description="Distribution sort that scatters elements into buckets." 
+              href="/dsa/arrays/sorting/bucket"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Shell Sort" 
+              description="Generalization of insertion sort using gaps." 
+              href="/dsa/arrays/sorting/shell"
               difficulty="Medium"
             />
           </div>
@@ -91,6 +115,24 @@ export default function ArraysPage() {
               name="Binary Search" 
               description="Search a sorted array by repeatedly dividing the search interval in half." 
               href="/dsa/arrays/searching/binary"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Jump Search" 
+              description="Searching in sorted arrays by jumping fixed steps." 
+              href="/dsa/arrays/searching/jump"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Interpolation Search" 
+              description="Improved binary search for uniformly distributed data." 
+              href="/dsa/arrays/searching/interpolation"
+              difficulty="Medium"
+            />
+            <AlgorithmCard 
+              name="Exponential Search" 
+              description="Find range where element is present, then binary search." 
+              href="/dsa/arrays/searching/exponential"
               difficulty="Medium"
             />
           </div>

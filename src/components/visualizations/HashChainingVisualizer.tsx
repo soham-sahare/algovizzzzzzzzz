@@ -3,17 +3,18 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { ChainingNode } from "@/lib/algorithms/hashing/separateChaining";
 
 interface HashChainingVisualizerProps {
-    buckets: number[][]; // Array of arrays
-    activeBucketIndex?: number;
-    highlightedNodeIndex?: number; // Valid only if activeBucketIndex is set
+    buckets: ChainingNode[][]; // Array of arrays of nodes
+    activeBucketIndex?: number | null;
+    activeNode?: { bucketIndex: number, nodeIndex: number };
 }
 
 export default function HashChainingVisualizer({
     buckets,
     activeBucketIndex,
-    highlightedNodeIndex
+    activeNode
 }: HashChainingVisualizerProps) {
     return (
         <div className="flex flex-col gap-2 p-4 bg-zinc-50 dark:bg-zinc-900/50 rounded-lg border border-zinc-200 dark:border-zinc-800">
@@ -42,12 +43,13 @@ export default function HashChainingVisualizer({
                         {/* Linked List Items */}
                         <div className="flex items-center gap-1 ml-4 overflow-x-auto">
                             <AnimatePresence>
-                                {bucket.map((val, nodeIdx) => {
-                                    const isHighlighted = isActiveBucket && highlightedNodeIndex === nodeIdx;
+                                {bucket.map((node, nodeIdx) => {
+                                    // Highlight if active bucket + active node matches
+                                    const isHighlighted = isActiveBucket && activeNode && activeNode.nodeIndex === nodeIdx;
                                     
                                     return (
                                         <motion.div
-                                            key={`${i}-${nodeIdx}-${val}`}
+                                            key={`${i}-${nodeIdx}-${node.value}`}
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ 
                                                 opacity: 1, 
@@ -65,7 +67,7 @@ export default function HashChainingVisualizer({
                                                     ? "border-blue-500 text-blue-700 bg-blue-50 dark:bg-blue-900/40 dark:text-blue-200" 
                                                     : "border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300"}
                                             `}>
-                                                {val}
+                                                {node.value}
                                             </div>
                                             {nodeIdx < bucket.length - 1 && (
                                                 <ArrowRight size={14} className="text-zinc-300" />
